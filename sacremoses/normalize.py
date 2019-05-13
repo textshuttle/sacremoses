@@ -69,10 +69,10 @@ class MosesPunctuationNormalizer:
     ]
 
     SUBSTITUTIONS_FRENCH_QUOTES = [ # lines 52 - 57
-        substitute(' « ', '"'),
+        substitute(' « ', ' "'),
         substitute('« ', '"'),
         substitute('«', '"'),
-        substitute(' » ', '"'),
+        substitute(' » ', '" '),
         substitute(' »', '"'),
         substitute('»', '"'),
     ]
