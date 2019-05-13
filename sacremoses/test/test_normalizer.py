@@ -1,77 +1,46 @@
 # -*- coding: utf-8 -*-
 
 """
-Tests for MosesPunctuationNormalizer
+Tests for MosesTokenizer
 """
 
+import io
 import os
 import unittest
-import subprocess
 
-from sacremoses.normalize import MosesPunctuationNormalizer
+from six import text_type
 
-from sacremoses.test.utils import download_file_if_not_exists, get_test_file
-import sacremoses.test.constants as C
+from sacremoses.normalize import MosesPunctuationNormalizer as MosesPunctNormalizer
 
 
-class TestMosesPunctuationNormalizer(unittest.TestCase):
+class TestNormalizer(unittest.TestCase):
+    def test_moses_normalize_documents(self):
+        moses = MosesPunctNormalizer()
+        # Examples from normalizing big.txt
+        inputs = ["The United States in 1805 (color map)                 _Facing_     193",
+                  "=Formation of the Constitution.=--(1) The plans before the convention,",
+                  "directions--(1) The infective element must be eliminated. When the ulcer",
+                  "College of Surgeons, Edinburgh.)]"]
+        expected = ["The United States in 1805 (color map) _Facing_ 193",
+                    "=Formation of the Constitution.=-- (1) The plans before the convention,",
+                    "directions-- (1) The infective element must be eliminated. When the ulcer",
+                    "College of Surgeons, Edinburgh.) ]"]
+        for text, expect in zip(inputs, expected):
+            assert moses.normalize(text) == expect
 
-    def setUp(self):
-        # Download original Perl script if needed
-        download_file_if_not_exists(C.MOSES_NORMALIZER_SCRIPT_URL,
-                                    C.MOSES_NORMALIZER_SCRIPT_LOCAL_PATH)
+    def test_moses_normalize_quote_comma(self):
+        moses_norm_quote = MosesPunctNormalizer('en')
+        moses_no_norm_quote = MosesPunctNormalizer('en')
+        text = 'THIS EBOOK IS OTHERWISE PROVIDED TO YOU "AS-IS".'
 
-    def _create_gold(self, test_file, language='en', penn=False):
-        """
-        Normalizes a file with the original Perl script and returns the path
-        to the normalized file.
-        """
-        flags = []
-        if language:
-            flags += ['-l', language]
-        if penn:
-            flags += ['-p']
-        command = ['perl', C.MOSES_NORMALIZER_SCRIPT_LOCAL_PATH] + flags
-        path_gold = '.'.join([test_file, 'normalized', 'gold'] + flags)
-        with open(test_file) as stdin, open(path_gold, 'w') as stdout:
-            process = subprocess.Popen(command, stdin=stdin, stdout=stdout)
-            process.wait()
-        return path_gold
+        expected_norm_quote = 'THIS EBOOK IS OTHERWISE PROVIDED TO YOU "AS-IS."'
+        assert moses_norm_quote.normalize(text) == expected_norm_quote
 
-    def _test_normalize(self, test_file, language='en', penn=False):
-        """
-        Compares MosesPunctuationNormalizer's output to the output of the
-        original Perl script.
-        """
-        normalizer = MosesPunctuationNormalizer(language=language, penn=penn)
-        # Normalize test file with original Perl script and given flags
-        path_gold = self._create_gold(test_file, language, penn)
-        # Compare to output of original Perl script
-        with open(test_file) as u, open(path_gold) as g:
-            for unnormalized, gold in zip(u, g):
-                normalized = normalizer.normalize(unnormalized)
-                self.assertEqual(normalized, gold)
-        # Delete output of original Perl script
-        os.remove(path_gold)
+    def test_moses_normalize_numbers(self):
+        # See https://stackoverflow.com/a/55233871/610569
+        moses_norm_num = MosesPunctNormalizer('en')
 
-    def test_normalize_en(self):
-        test_file = get_test_file('en')
-        self._test_normalize(test_file=test_file, language='en', penn=False)
+        text = u'12{}123'.format(u'\u00A0')
+        expected = u'12.123'
+        assert moses_norm_num.normalize(text) == expected
 
-    def test_normalize_en_penn(self):
-        test_file = get_test_file('en')
-        self._test_normalize(test_file=test_file, language='en', penn=True)
-
-    def test_normalize_de(self):
-        test_file = get_test_file('de')
-        self._test_normalize(test_file=test_file, language='de', penn=False)
-
-    def test_normalize_de_penn(self):
-        test_file = get_test_file('de')
-        self._test_normalize(test_file=test_file, language='de', penn=True)
-
-    # TODO: add tests for other languages
-
-
-if __name__ == '__main__':
-    unittest.main()
