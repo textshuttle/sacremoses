@@ -6,9 +6,7 @@ Tests for MosesTokenizer
 
 import io
 import unittest
-
 from six import text_type
-
 from sacremoses.truecase import MosesTruecaser, MosesDetruecaser
 from sacremoses.test.utils import get_test_file
 import sacremoses.test.constants as C

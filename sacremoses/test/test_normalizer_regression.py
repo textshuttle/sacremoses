@@ -7,9 +7,7 @@ Tests for MosesPunctuationNormalizer
 import os
 import unittest
 import subprocess
-
 from sacremoses.normalize import MosesPunctuationNormalizer
-
 from sacremoses.test.utils import download_file_if_not_exists, get_test_file
 import sacremoses.test.constants as C
 
