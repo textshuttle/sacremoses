@@ -77,6 +77,13 @@ class TestMosesPunctuationNormalizer(unittest.TestCase):
         test_file = get_test_file('de')
         self._test_normalize(test_file=test_file, language='de', penn=True)
 
+    def test_normalize_fr(self):
+        test_file = get_test_file('fr')
+        self._test_normalize(test_file=test_file, language='de', penn=False)
+
+    def test_normalize_fr_penn(self):
+        test_file = get_test_file('fr')
+        self._test_normalize(test_file=test_file, language='de', penn=True)
     # TODO: add tests for other languages
 
 

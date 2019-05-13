@@ -14,7 +14,7 @@ setup(
   long_description = 'LGPL MosesTokenizer in Python',
   author = '',
   license = '',
-  package_data={'sacremoses': ['data/perluniprops/*.txt', 'data/nonbreaking_prefixes/nonbreaking_prefix.*']},
+  package_data={'sacremoses': ['share/perluniprops/*.txt', 'share/nonbreaking_prefixes/nonbreaking_prefix.*']},
   url = 'https://github.com/alvations/sacremoses',
   keywords = [],
   classifiers = [],

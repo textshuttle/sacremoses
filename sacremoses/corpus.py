@@ -35,7 +35,7 @@ class Perluniprops:
 
         :return: a generator of characters given the specific unicode character category
         """
-        relative_path = os.path.join("data", "perluniprops", category + ".txt")
+        relative_path = os.path.join("share", "perluniprops", category + ".txt")
         binary_data = pkgutil.get_data("sacremoses", relative_path)
         for ch in binary_data.decode("utf-8"):
             yield ch
@@ -48,7 +48,7 @@ class NonbreakingPrefixes:
     of the Moses' word tokenizer.
     """
     def __init__(self):
-        self.datadir = os.path.dirname(os.path.abspath(__file__)) + '/data/nonbreaking_prefixes/'
+        self.datadir = os.path.dirname(os.path.abspath(__file__)) + '/share/nonbreaking_prefixes/'
         self.available_langs = {'catalan':    'ca',
                                 'czech':      'cs',
                                 'german':     'de',
@@ -98,7 +98,7 @@ class NonbreakingPrefixes:
             filenames = ['nonbreaking_prefix.en']
 
         for filename in filenames:
-            relative_path = os.path.join("data", "nonbreaking_prefixes", filename)
+            relative_path = os.path.join("share", "nonbreaking_prefixes", filename)
             binary_data = pkgutil.get_data("sacremoses", relative_path)
             for line in binary_data.decode("utf-8").splitlines():
                 line = line.strip()
