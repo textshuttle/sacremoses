@@ -20,7 +20,7 @@ class MosesTokenizer(object):
     """
     # Perl Unicode Properties character sets.
     IsN = text_type(''.join(perluniprops.chars('IsN')))
-    IsAlnum = text_type(''.join(perluniprops.chars('IsAlnum')))
+    IsAlnum = text_type(''.join(perluniprops.chars('IsAlnum'))) #+ u'्'
     IsSc = text_type(''.join(perluniprops.chars('IsSc')))
     IsSo = text_type(''.join(perluniprops.chars('IsSo')))
     IsAlpha = text_type(''.join(perluniprops.chars('IsAlpha')))
@@ -131,7 +131,7 @@ class MosesTokenizer(object):
     CONTRACTION_13 = r" ([Gg])onna ", r" \1on na "
     CONTRACTION_14 = r" ([Gg])otta ", r" \1ot ta "
     CONTRACTION_15 = r" ([Ll])emme ", r" \1em me "
-    CONTRACTION_16 = r" ([Mm])ore$text =~ s='n ", r" \1ore 'n "
+    CONTRACTION_16 = r" ([Mm])ore'n ", r" \1ore 'n "
     CONTRACTION_17 = r" '([Tt])is ", r" '\1 is "
     CONTRACTION_18 = r" '([Tt])was ", r" '\1 was "
     CONTRACTION_19 = r" ([Ww])anna ", r" \1an na "
@@ -168,7 +168,15 @@ class MosesTokenizer(object):
     FR_IT_SPECIFIC_APOSTROPHE = [FR_IT_SPECIFIC_1, FR_IT_SPECIFIC_2,
                                  FR_IT_SPECIFIC_3, FR_IT_SPECIFIC_4]
 
-    NON_SPECIFIC_APOSTROPHE = r"\'", r" \' "
+    NON_SPECIFIC_APOSTROPHE = r"\'", " ' "
+
+    TRAILING_DOT_APOSTROPHE = "\.\' ?$", " . ' "
+
+    BASIC_PROTECTED_PATTERN_1 = r"<\/?\S+\/?>"
+    BASIC_PROTECTED_PATTERN_2 = "<\S+( [a-zA-Z0-9]+\=\"?[^\"]\")+ ?\/?>"
+    BASIC_PROTECTED_PATTERN_3 = "<\S+( [a-zA-Z0-9]+\=\'?[^\']\')+ ?\/?>"
+    BASIC_PROTECTED_PATTERN_4 = "[\w\-\_\.]+\@([\w\-\_]+\.)+[a-zA-Z]{2,}"
+    BASIC_PROTECTED_PATTERN_5 = "(http[s]?|ftp):\/\/[^:\/\s]+(\/\w+)*\/[\w\-\.]+"
 
     MOSES_PENN_REGEXES_1 = [DEDUPLICATE_SPACE, ASCII_JUNK, DIRECTIONAL_QUOTE_1,
                             DIRECTIONAL_QUOTE_2, DIRECTIONAL_QUOTE_3,
@@ -204,6 +212,12 @@ class MosesTokenizer(object):
                                 ESCAPE_LEFT_SQUARE_BRACKET,
                                 ESCAPE_RIGHT_SQUARE_BRACKET]
 
+    BASIC_PROTECTED_PATTERNS = [BASIC_PROTECTED_PATTERN_1,
+                                BASIC_PROTECTED_PATTERN_2,
+                                BASIC_PROTECTED_PATTERN_3,
+                                BASIC_PROTECTED_PATTERN_4,
+                                BASIC_PROTECTED_PATTERN_5]
+
     def __init__(self, lang='en'):
         # Initialize the object.
         super(MosesTokenizer, self).__init__()
@@ -229,8 +243,8 @@ class MosesTokenizer(object):
     def islower(self, text):
         return not set(text).difference(set(self.IsLower))
 
-    def isalpha(self, text):
-        return not set(text).difference(set(self.IsAlpha))
+    def isanyalpha(self, text):
+        return any(set(text).intersection(set(self.IsAlpha)))
 
     def has_numeric_only(self, text):
         return bool(re.search(r'(.*)[\s]+(\#NUMERIC_ONLY\#)', text))
@@ -251,7 +265,7 @@ class MosesTokenizer(object):
                 #      does not contain #NUMERIC_ONLY#
                 # iii. the token is not the last token and that the
                 #      next token contains all lowercase.
-                if (('.' in prefix and self.isalpha(prefix)) or
+                if (('.' in prefix and self.isanyalpha(prefix)) or
                         (prefix in self.NONBREAKING_PREFIXES and
                          prefix not in self.NUMERIC_ONLY_PREFIXES) or
                         (i != num_tokens - 1 and self.islower(tokens[i + 1]))):
@@ -288,7 +302,11 @@ class MosesTokenizer(object):
             text = re.sub(regexp, substitution, text)
         return text if return_str else text.split()
 
-    def tokenize(self, text, aggressive_dash_splits=False, return_str=False, escape=True):
+    def tokenize(self, text,
+                 aggressive_dash_splits=False,
+                 return_str=False,
+                 escape=True,
+                 protected_patterns=None):
         """
         Python port of the Moses tokenizer.
 
@@ -299,10 +317,20 @@ class MosesTokenizer(object):
         """
         # Converts input string into unicode.
         text = text_type(text)
-
         # De-duplicate spaces and clean ASCII junk
         for regexp, substitution in [self.DEDUPLICATE_SPACE, self.ASCII_JUNK]:
             text = re.sub(regexp, substitution, text)
+
+        if protected_patterns:
+            # Find the tokens that needs to be protected.
+            protected_tokens = [match.group()
+                                for protected_pattern in protected_patterns
+                                for match in re.finditer(protected_pattern, text, re.IGNORECASE)]
+            # Apply the protected_patterns.
+            for i, token in enumerate(protected_tokens):
+                substituition = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(token, substituition)
+
         # Strips heading and trailing spaces.
         text = text.strip()
         # Separate special characters outside of IsAlnum character set.
@@ -334,6 +362,16 @@ class MosesTokenizer(object):
         # Cleans up extraneous spaces.
         regexp, substitution = self.DEDUPLICATE_SPACE
         text = re.sub(regexp, substitution, text).strip()
+        # Split trailing ".'".
+        regexp, substituition = self.TRAILING_DOT_APOSTROPHE
+        text = re.sub(regexp, substituition, text)
+
+        # Restore the protected tokens.
+        if protected_patterns:
+            for i, token in enumerate(protected_tokens):
+                substituition = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(substituition, token)
+
         # Restore multidots.
         text = self.restore_multidots(text)
         if escape:
@@ -448,7 +486,6 @@ class MosesDetokenizer(object):
                 else:
                     detokenized_text += prepend_space + token
                 prepend_space = " "
-
             # If it's a currency symbol.
             elif re.search(u"^[" + self.IsSc + u"\(\[\{\¿\¡]+$", token):
                 # Perform right shift on currency and other random punctuation items
@@ -480,7 +517,7 @@ class MosesDetokenizer(object):
 
             elif (self.lang in ['fr', 'it', 'ga'] and i <= len(tokens) - 2
                   and re.search(u'[{}][\']$'.format(self.IsAlpha), token)
-                  and re.search(u'^[{}]$'.format(self.IsAlpha), tokens[i + 1])):  # If the next token is alpha.
+                  and re.search(u'^[{}]'.format(self.IsAlpha), tokens[i + 1])):  # If the next token is alpha.
                 # For French and Italian, right-shift the contraction.
                 detokenized_text += prepend_space + token
                 prepend_space = ""

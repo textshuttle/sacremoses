@@ -4,7 +4,7 @@
 This is a Python port of the Moses Punctuation Normalizer from
 https://github.com/moses-smt/mosesdecoder/blob/master/scripts/tokenizer/normalize-punctuation.perl
 """
-
+from __future__ import unicode_literals
 import re
 
 

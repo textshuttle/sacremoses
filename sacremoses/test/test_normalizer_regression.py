@@ -11,6 +11,15 @@ from sacremoses.normalize import MosesPunctuationNormalizer
 from sacremoses.test.utils import download_file_if_not_exists, get_test_file
 import sacremoses.test.constants as C
 
+# Hack to enable Python2.7 to use encoding.
+import sys
+if sys.version_info[0] < 3:
+    import io
+    import warnings
+    open = io.open
+    warnings.warn(str('You should really be using Python3!!! '
+                      'Tick tock, tick tock, https://pythonclock.org/'))
+
 
 class TestMosesPunctuationNormalizer(unittest.TestCase):
 
@@ -31,7 +40,7 @@ class TestMosesPunctuationNormalizer(unittest.TestCase):
             flags += ['-p']
         command = ['perl', C.MOSES_NORMALIZER_SCRIPT_LOCAL_PATH] + flags
         path_gold = '.'.join([test_file, 'normalized', 'gold'] + flags)
-        with open(test_file) as stdin, open(path_gold, 'w') as stdout:
+        with open(test_file, encoding='utf-8') as stdin, open(path_gold, 'w', encoding='utf-8') as stdout:
             process = subprocess.Popen(command, stdin=stdin, stdout=stdout)
             process.wait()
         return path_gold
@@ -45,7 +54,7 @@ class TestMosesPunctuationNormalizer(unittest.TestCase):
         # Normalize test file with original Perl script and given flags
         path_gold = self._create_gold(test_file, language, penn)
         # Compare to output of original Perl script
-        with open(test_file) as u, open(path_gold) as g:
+        with open(test_file, encoding='utf-8') as u, open(path_gold, encoding='utf-8') as g:
             for unnormalized, gold in zip(u, g):
                 normalized = normalizer.normalize(unnormalized)
                 self.assertEqual(normalized, gold)

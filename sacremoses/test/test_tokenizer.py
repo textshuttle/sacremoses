@@ -8,6 +8,7 @@ import unittest
 
 from sacremoses.tokenize import MosesTokenizer, MosesDetokenizer
 
+
 class TestTokenzier(unittest.TestCase):
     def test_moses_tokenize(self):
         moses = MosesTokenizer()
@@ -32,6 +33,11 @@ class TestTokenzier(unittest.TestCase):
         assert moses.tokenize(text, escape=True) == expected_tokens_with_xmlescape
         assert moses.tokenize(text, escape=False) == expected_tokens_wo_xmlescape
 
+        # Test to check https://github.com/alvations/sacremoses/issues/19
+        text = "this 'is' the thing"
+        expected_tokens = ['this', '&apos;', 'is', '&apos;', 'the', 'thing']
+        assert moses.tokenize(text, escape=True) == expected_tokens
+
     def test_aggressive_split(self):
         moses = MosesTokenizer()
         expected_tokens_wo_aggressive_dash_split = ['foo-bar']
@@ -50,6 +56,33 @@ class TestTokenzier(unittest.TestCase):
 
         assert moses.tokenize(text) == expected_tokens
 
+    def test_dot_splitting(self):
+        moses = MosesTokenizer()
+        text = "The meeting will take place at 11:00 a.m. Tuesday."
+        expected_tokens = "The meeting will take place at 11 : 00 a.m. Tuesday .".split()
+        self.assertEqual(moses.tokenize(text), expected_tokens)
+
+    def test_trailing_dot_apostrophe(self):
+        moses = MosesTokenizer()
+        text = "'Hello.'"
+        expected_tokens = "&apos;Hello . &apos;".split()
+        self.assertEqual(moses.tokenize(text), expected_tokens)
+
+    def test_protect_patterns(self):
+        moses = MosesTokenizer()
+        text = "this is a webpage https://stackoverflow.com/questions/6181381/how-to-print-variables-in-perl that kicks ass"
+        expected_tokens = ['this', 'is', 'a', 'webpage',
+                           'https://stackoverflow.com/questions/6181381/how-to-print-variables-in-perl',
+                           'that', 'kicks', 'ass']
+        assert moses.tokenize(text, protected_patterns=moses.BASIC_PROTECTED_PATTERNS) == expected_tokens
+
+        # Testing against pattern from https://github.com/alvations/sacremoses/issues/35
+        noe_patterns = [r'(?:http|ftp)s?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?))'
+            r'(?::\d+)?'  # optional port
+            r'(?:/\w+)*'
+            r'(?:(?:\.[a-z]+)|/?)']
+        assert moses.tokenize(text, protected_patterns=noe_patterns) == expected_tokens
 
 class TestDetokenizer(unittest.TestCase):
     def test_moses_detokenize(self):
@@ -80,5 +113,11 @@ class TestDetokenizer(unittest.TestCase):
         detokenizer = MosesDetokenizer()
 
         text = "By the mid 1990s a version of the game became a Latvian television series (with a parliamentary setting, and played by Latvian celebrities)."
+        assert detokenizer.detokenize(tokenizer.tokenize(text)) == text
 
+    def test_french_apostrophes(self):
+        tokenizer = MosesTokenizer(lang='fr')
+        detokenizer = MosesDetokenizer(lang='fr')
+
+        text = u"L'amitié nous a fait forts d'esprit"
         assert detokenizer.detokenize(tokenizer.tokenize(text)) == text
