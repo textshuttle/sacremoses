@@ -261,6 +261,10 @@ class MosesTokenizer(object):
             token_ends_with_period = re.search(r'^(\S+)\.$', token)
             if token_ends_with_period:
                 prefix = token_ends_with_period.group(1)
+                # split last words independently as they are unlikely to be non-breaking prefixes
+                # changed in https://github.com/moses-smt/mosesdecoder/pull/204/files
+                if (i + 1) == num_tokens:
+                    tokens[i] = prefix + ' .'
                 # Checks for 3 conditions if
                 # i.   the prefix contains a fullstop and
                 #      any char in the prefix is within the IsAlpha charset
@@ -268,7 +272,7 @@ class MosesTokenizer(object):
                 #      does not contain #NUMERIC_ONLY#
                 # iii. the token is not the last token and that the
                 #      next token contains all lowercase.
-                if (('.' in prefix and self.isanyalpha(prefix)) or
+                elif (('.' in prefix and self.isanyalpha(prefix)) or
                         (prefix in self.NONBREAKING_PREFIXES and
                          prefix not in self.NUMERIC_ONLY_PREFIXES) or
                         (i != num_tokens - 1 and self.is_first_lower(tokens[i + 1]))):
@@ -587,5 +591,6 @@ class MosesDetokenizer(object):
     def detokenize(self, tokens, return_str=True, unescape=True):
         """ Duck-typing the abstract *tokenize()*."""
         return self.tokenize(tokens, return_str, unescape)
+
 
 __all__ = ['MosesTokenizer', 'MosesDetokenizer']
