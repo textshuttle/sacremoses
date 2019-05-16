@@ -56,6 +56,9 @@ class MosesTokenizer(object):
     COMMA_SEPARATE_1 = u'([^{}])[,]'.format(IsN), r'\1 , '
     COMMA_SEPARATE_2 = u'[,]([^{}])'.format(IsN), r' , \1'
 
+    # separate "," after a number if it's the end of a sentence
+    COMMA_SEPARATE_3 = u'([{}])[,]$'.format(IsN), r'\1 , '
+
     # Attempt to get correct directional quotes.
     DIRECTIONAL_QUOTE_1 = r'^``', r'`` '
     DIRECTIONAL_QUOTE_2 = r'^"', r'`` '
@@ -240,8 +243,8 @@ class MosesTokenizer(object):
             text = re.sub(r'DOTDOTMULTI', r'DOTMULTI.', text)
         return re.sub(r'DOTMULTI', r'.', text)
 
-    def islower(self, text):
-        return not set(text).difference(set(self.IsLower))
+    def is_first_lower(self, text):
+        return re.match(r"^[{islower}]".format(islower=self.IsLower), text)
 
     def isanyalpha(self, text):
         return any(set(text).intersection(set(self.IsAlpha)))
@@ -258,6 +261,10 @@ class MosesTokenizer(object):
             token_ends_with_period = re.search(r'^(\S+)\.$', token)
             if token_ends_with_period:
                 prefix = token_ends_with_period.group(1)
+                # split last words independently as they are unlikely to be non-breaking prefixes
+                # changed in https://github.com/moses-smt/mosesdecoder/pull/204/files
+                if (i + 1) == num_tokens:
+                    tokens[i] = prefix + ' .'
                 # Checks for 3 conditions if
                 # i.   the prefix contains a fullstop and
                 #      any char in the prefix is within the IsAlpha charset
@@ -265,10 +272,10 @@ class MosesTokenizer(object):
                 #      does not contain #NUMERIC_ONLY#
                 # iii. the token is not the last token and that the
                 #      next token contains all lowercase.
-                if (('.' in prefix and self.isanyalpha(prefix)) or
+                elif (('.' in prefix and self.isanyalpha(prefix)) or
                         (prefix in self.NONBREAKING_PREFIXES and
                          prefix not in self.NUMERIC_ONLY_PREFIXES) or
-                        (i != num_tokens - 1 and self.islower(tokens[i + 1]))):
+                        (i != num_tokens - 1 and self.is_first_lower(tokens[i + 1]))):
                     pass  # No change to the token.
                 # Checks if the prefix is in NUMERIC_ONLY_PREFIXES
                 # and ensures that the next word is a digit.
@@ -328,8 +335,8 @@ class MosesTokenizer(object):
                                 for match in re.finditer(protected_pattern, text, re.IGNORECASE)]
             # Apply the protected_patterns.
             for i, token in enumerate(protected_tokens):
-                substituition = 'THISISPROTECTED' + str(i).zfill(3)
-                text = text.replace(token, substituition)
+                substitution = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(token, substitution)
 
         # Strips heading and trailing spaces.
         text = text.strip()
@@ -343,7 +350,7 @@ class MosesTokenizer(object):
         # Replaces multidots with "DOTDOTMULTI" literal strings.
         text = self.replace_multidots(text)
         # Separate out "," except if within numbers e.g. 5,300
-        for regexp, substitution in [self.COMMA_SEPARATE_1, self.COMMA_SEPARATE_2]:
+        for regexp, substitution in [self.COMMA_SEPARATE_1, self.COMMA_SEPARATE_2, self.COMMA_SEPARATE_3]:
             text = re.sub(regexp, substitution, text)
 
         # (Language-specific) apostrophe tokenization.
@@ -363,14 +370,14 @@ class MosesTokenizer(object):
         regexp, substitution = self.DEDUPLICATE_SPACE
         text = re.sub(regexp, substitution, text).strip()
         # Split trailing ".'".
-        regexp, substituition = self.TRAILING_DOT_APOSTROPHE
-        text = re.sub(regexp, substituition, text)
+        regexp, substitution = self.TRAILING_DOT_APOSTROPHE
+        text = re.sub(regexp, substitution, text)
 
         # Restore the protected tokens.
         if protected_patterns:
             for i, token in enumerate(protected_tokens):
-                substituition = 'THISISPROTECTED' + str(i).zfill(3)
-                text = text.replace(substituition, token)
+                substitution = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(substitution, token)
 
         # Restore multidots.
         text = self.restore_multidots(text)
@@ -584,5 +591,6 @@ class MosesDetokenizer(object):
     def detokenize(self, tokens, return_str=True, unescape=True):
         """ Duck-typing the abstract *tokenize()*."""
         return self.tokenize(tokens, return_str, unescape)
+
 
 __all__ = ['MosesTokenizer', 'MosesDetokenizer']
