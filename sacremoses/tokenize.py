@@ -240,8 +240,8 @@ class MosesTokenizer(object):
             text = re.sub(r'DOTDOTMULTI', r'DOTMULTI.', text)
         return re.sub(r'DOTMULTI', r'.', text)
 
-    def islower(self, text):
-        return not set(text).difference(set(self.IsLower))
+    def is_first_lower(self, text):
+        return re.match(r"^[{islower}]".format(islower=self.IsLower), text)
 
     def isanyalpha(self, text):
         return any(set(text).intersection(set(self.IsAlpha)))
@@ -268,7 +268,7 @@ class MosesTokenizer(object):
                 if (('.' in prefix and self.isanyalpha(prefix)) or
                         (prefix in self.NONBREAKING_PREFIXES and
                          prefix not in self.NUMERIC_ONLY_PREFIXES) or
-                        (i != num_tokens - 1 and self.islower(tokens[i + 1]))):
+                        (i != num_tokens - 1 and self.is_first_lower(tokens[i + 1]))):
                     pass  # No change to the token.
                 # Checks if the prefix is in NUMERIC_ONLY_PREFIXES
                 # and ensures that the next word is a digit.
