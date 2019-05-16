@@ -141,3 +141,18 @@ class MosesPunctuationNormalizer:
         for sub in self.substitutions:
             string = sub(string)
         return string
+
+
+# Alias for forward compatibility with upstream
+class MosesPunctNormalizer(MosesPunctuationNormalizer):
+    def __init__(self, lang='en', penn=False, norm_quote_commas=True, norm_numbers=True):
+        super().__init__(language=lang, penn=penn)
+        if not norm_quote_commas:
+            norm_quote_comma_rules = self.SUBSTITUTIONS_EN_QUOTATION_FOLLOWED_BY_COMMA + self.SUBSTITUTIONS_DE_ES_FR_QUOTATION_FOLLOWED_BY_COMMA
+            self.substitutions = [s for s in self.substitutions if s not in norm_quote_comma_rules]
+
+        if not norm_numbers:
+            norm_number_rules = self.SUBSTITUTIONS_DE_ES_CZ_CS_FR + self.SUBSTITUTIONS_OTHER
+            self.substitutions = [s for s in self.substitutions if s not in norm_number_rules]
+
+
