@@ -74,8 +74,11 @@ class TestMosesTokenizer(unittest.TestCase):
 
     def test_tokenize_fr(self):
         test_file = get_test_file('fr')
-        self._test_tokenize(test_file=test_file, language='de')
+        self._test_tokenize(test_file=test_file, language='fr')
 
+    def test_tokenize_it(self):
+        test_file = get_test_file('it')
+        self._test_tokenize(test_file=test_file, language='it')
     # TODO: add tests for other languages
 
 

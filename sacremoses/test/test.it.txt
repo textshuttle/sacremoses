@@ -1,0 +1,2947 @@
+
+          Note di rilascio per Debian 9 (stretch), System z
+
+
+---------------------------------------------------------------------
+
+Debian Documentation Project (http://www.debian.org/doc/)
+
+    Questo documento è software libero; è permesso ridistribuirlo e/o
+    modificarlo nei termini della GNU General Public License versione
+    2, come pubblicato dalla Free Software Foundation.
+
+    Questo programma è distribuito nella speranza di essere utile, ma
+    SENZA ALCUNA GARANZIA; senza nemmeno garanzia implicita di
+    COMMERCIABILITÀ o di IDONEITÀ PER UN PARTICOLARE SCOPO. Per
+    maggiori dettagli consultare la GNU General Public License.
+
+    Una copia della GNU General Public License dovrebbe essere stata
+    ricevuta insieme al programma; in caso contrario, scrivere alla
+    Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301 (USA).
+
+    Il testo della licenza può essere consultato anche presso http://
+    www.gnu.org/licenses/gpl-2.0.html (http://www.gnu.org/licenses/
+    gpl-2.0.html) e /usr/share/common-licenses/GPL-2 in Debian.
+
+---------------------------------------------------------------------
+
+Indice
+
+1. Introduzione
+
+    1.1. Segnalare errori in questo documento
+    1.2. Fornire resoconti di aggiornamento
+    1.3. Sorgenti di questo documento
+
+2. Cosa c'è di nuovo in Debian 9
+
+    2.1. Architetture supportate
+    2.2. Cosa c'è di nuovo nella distribuzione?
+
+        2.2.1. CD, DVD e BD
+        2.2.2. Sicurezza
+        2.2.3. Versioni di GCC
+        2.2.4. MariaDB sostituisce MySQL
+        2.2.5. Migliorie ad APT e alla struttura degli archivi
+        2.2.6. Nuovo mirror deb.debian.org
+        2.2.7. Passaggio a GnuPG «moderno»
+        2.2.8. Un nuovo archivio per i simboli di debug
+        2.2.9. Nuovo metodo per assegnare nomi alle interfacce di
+            rete
+        2.2.10. Novità dal Blend Debian Med
+        2.2.11. Il server Xorg non richiede più di essere root
+
+3. Sistema d'installazione
+
+    3.1. Cosa c'è di nuovo nel sistema di installazione?
+
+        3.1.1. Cambiamenti principali
+        3.1.2. Installazione automatizzata
+
+4. Aggiornamenti da Debian 8 (jessie)
+
+    4.1. Preparazione all'aggiornamento
+
+        4.1.1. Salvare i dati e le informazioni di configurazione
+        4.1.2. Informare gli utenti in anticipo
+        4.1.3. Preparazione all'indisponibilità dei servizi
+        4.1.4. Preparazione per il ripristino
+        4.1.5. Preparazione di un ambiente sicuro per l'aggiornamento
+
+    4.2. Verifica dello stato del sistema
+
+        4.2.1. Rivedere le azioni in sospeso nel gestore di pacchetti
+        4.2.2. Disattivare il pinning di APT
+        4.2.3. Verifica dello stato dei pacchetti
+        4.2.4. La sezione «proposed-updates» (aggiornamenti proposti)
+        4.2.5. Fonti non ufficiali
+
+    4.3. Preparazione delle fonti per APT
+
+        4.3.1. Aggiunta di fonti internet per APT
+        4.3.2. Aggiunta di fonti per APT da mirror locale
+        4.3.3. Aggiunta di fonti per APT da supporti ottici
+
+    4.4. Aggiornare i pacchetti
+
+        4.4.1. Registrazione della sessione
+        4.4.2. Aggiornamento della lista dei pacchetti
+        4.4.3. Accertarsi di avere spazio disponibile a sufficienza
+            per l'aggiornamento
+        4.4.4. Aggiornamento minimo del sistema
+        4.4.5. Aggiornamento del sistema
+
+    4.5. Possibili problemi durante l'aggiornamento
+
+        4.5.1. Dist-upgrade fallisce con l'errore «Impossibile
+            eseguire immediatamente la configurazione»
+        4.5.2. Rimozioni attese
+        4.5.3. Conflitti e pre-dipendenze cicliche
+        4.5.4. Conflitti tra file
+        4.5.5. Modifiche alla configurazione
+        4.5.6. Cambiare la sessione sulla console
+
+    4.6. Aggiornare il kernel e i pacchetti collegati
+
+        4.6.1. Installazione di un metapacchetto del kernel
+
+    4.7. Preparazione per il prossimo rilascio
+
+        4.7.1. Eliminare completamente i pacchetti rimossi
+
+    4.8. Pacchetti obsoleti
+
+        4.8.1. Pacchetti fittizi
+
+5. Problemi di cui essere al corrente per stretch
+
+    5.1. Aspetti specifici dell'aggiornamento a stretch
+
+        5.1.1. Il montaggio ritardato di /usr non è più supportato
+        5.1.2. L'accesso FTP ai mirror ospitati da Debian verrà
+            rimosso
+        5.1.3. Pacchetti obsoleti degni di nota
+        5.1.4. Cose da fare dopo l'aggiornamento prima di riavviare
+        5.1.5. Gli eseguibili sono adesso compilati in modo
+            predefinito come eseguibili indipendenti dalla posizione
+            (PIE, Position Independent Executable).
+        5.1.6. La maggior parte dei pacchetti di compatibilità con
+            LSB sono stati rimossi
+
+    5.2. Limitazione nel supporto per la sicurezza
+
+        5.2.1. Stato della sicurezza dei browser web
+        5.2.2. Mancanza di supporto di sicurezza per l'ecosistema di
+            libv8 e Node.js
+
+    5.3. Problemi relativi a specifici pacchetti
+
+        5.3.1. Protocollo SSH1 e cifrari più vecchi disabilitati in
+            OpenSSH in modo predefinito
+        5.3.2. Modifiche potenziamente incompatibili all'indietro in
+            APT
+        5.3.3. I desktop migreranno al driver di Xorg libinput
+        5.3.4. Upstart rimosso
+        5.3.5. Lo strumento debhelper ora genera in modo predefinito
+            pacchetti dbgsym
+        5.3.6. Cambiamenti relativi a OpenSSL
+        5.3.7. Modifiche a Perl che possono rendere non funzionante
+            software di terze parti
+        5.3.8. Incompatibilità PostgreSQL PL/Perl
+        5.3.9. net-tools diventerà deprecato in favore di iproute2
+        5.3.10. L'opzione di mount _netdev è raccomandata quando si
+            usano dispositivi AoE (ATA over Ethernet)
+        5.3.11. Avvertimenti non problematici «Unescaped ... in regex
+            is deprecated, ...» durante l'aggiornamento
+        5.3.12. Migrazione dell'archivio della politica SELinux
+        5.3.13. iSCSI Enterprise Target non più supportato
+
+6. Maggiori informazioni su Debian
+
+    6.1. Ulteriori letture
+    6.2. Ottenere aiuto
+
+        6.2.1. Liste di messaggi
+        6.2.2. Internet Relay Chat
+
+    6.3. Segnalare i bug
+    6.4. Contribuire a Debian
+
+A. Gestire il proprio sistema jessie prima dell'avanzamento
+
+    A.1. Aggiornare il proprio sistema jessie
+    A.2. Controllare la propria lista delle fonti
+    A.3. Rimuovere file di configurazione obsoleti
+    A.4. Passare dai locale obsoleti a UTF-8
+
+B. Contributori delle note di rilascio
+Indice analitico
+Glossario
+
+Capitolo 1. Introduzione
+
+    Questo documento fornisce informazioni agli utenti della
+    distribuzione Debian sui cambiamenti principali nella versione 9
+    (nome in codice stretch).
+
+    Le note di rilascio forniscono informazioni su come aggiornare in
+    modo sicuro dalla versione 8 (nome in codice jessie) alla
+    versione attuale e informano gli utenti sui possibili problemi
+    conosciuti in cui potrebbero incorrere durante tale processo.
+
+    È possibile ottenere la versione più recente di questo documento
+    da https://www.debian.org/releases/stretch/releasenotes (https://
+    www.debian.org/releases/stretch/releasenotes) . Nel dubbio,
+    controllare la data del documento nel frontespizio e assicurarsi
+    di avere l'ultima versione disponibile.
+
+    Attenzione
+
+    È impossibile elencare ogni possibile problema conosciuto,
+    pertanto è stata fatta una selezione basata su probabili gravità
+    e diffusione.
+
+    Si noti anche che vengono forniti solo il supporto e la
+    documentazione relativi all'aggiornamento dalla versione
+    precedente di Debian (in questo caso l'aggiornamento da jessie).
+    Se si deve aggiornare il sistema da versioni antecedenti, si
+    suggerisce di leggere le edizioni precedenti delle note di
+    rilascio e di aggiornare dapprima a jessie.
+
+1.1. Segnalare errori in questo documento
+
+    Si è cercato di verificare tutti i vari passi dell'aggiornamento
+    descritti in questo documento e si è anche cercato di anticipare
+    ogni possibile problema nel quale si potrebbe incorrere.
+
+    Ciononostante, se si ritiene di aver trovato un qualsiasi errore
+    in questa documentazione (informazioni non corrette o mancanti),
+    si invii una segnalazione al sistema di tracciamento dei bug
+    (https://bugs.debian.org/) per il pacchetto release-notes. Prima
+    di inviare la segnalazione si dovrebbe verificare se tra le
+    segnalazioni d'errore esistenti (https://bugs.debian.org/
+    release-notes) non sia già presente il problema trovato. Chiunque
+    è libero di aggiungere delle informazioni alle segnalazioni
+    esistenti in modo da contribuire al contenuto di questo
+    documento.
+
+    Le segnalazioni con correzioni per i sorgenti del documento sono
+    apprezzate e incoraggiate. In Sezione 1.3, «Sorgenti di questo
+    documento» sono disponibili ulteriori informazioni su come
+    ottenere i sorgenti di questo documento.
+
+1.2. Fornire resoconti di aggiornamento
+
+    Ogni informazione dagli utenti inerente l'aggiornamento da jessie
+    a stretch è benvenuta. Se si desidera condividere informazioni,
+    compilare una segnalazione nel sistema di tracciamento dei bug
+    (https://bugs.debian.org/) per il pacchetto upgrade-reports con i
+    risultati ottenuti. È richiesto che ogni eventuale allegato venga
+    compresso usando gzip.
+
+    Quando si invia un resoconto di aggiornamento è necessario
+    includere le seguenti informazioni:
+
+      * Lo stato del proprio database dei pacchetti prima e dopo
+        l'aggiornamento: il database di dpkg dello stato dei
+        pacchetti, disponibile in /var/lib/dpkg/status e le
+        informazioni di apt sullo stato dei pacchetti, disponibili in
+        /var/lib/apt/extended_states. Prima di aggiornare si dovrebbe
+        aver effettuato una copia di sicurezza, come descritto in
+        Sezione 4.1.1, «Salvare i dati e le informazioni di
+        configurazione», ma è anche possibile trovare copie di /var/
+        lib/dpkg/status in /var/backups.
+
+      * Le trascrizioni delle sessioni al terminale, ottenute con 
+        script, come descritto in Sezione 4.4.1, «Registrazione della
+        sessione».
+
+      * I registri di apt, disponibili in /var/log/apt/term.log, o i
+        registri di aptitude, disponibili in /var/log/aptitude.
+
+    Nota
+
+    Prima di inviare le informazioni contenute nei file di registro è
+    opportuno verificare che non vi siano informazioni che si
+    ritengono private, poiché tutta la segnalazione verrà inserita in
+    un database pubblico.
+
+1.3. Sorgenti di questo documento
+
+    I sorgenti di questo documento sono in formato DocBook XML . La
+    versione in HTML viene generata usando docbook-xsl e xsltproc. La
+    versione in PDF viene generata usando dblatex o xmlroff. I
+    sorgenti delle note di rilascio sono disponibili nell'archivio
+    SVN del Debian Documentation Project. È possibile utilizzare l'
+    interfaccia web (https://anonscm.debian.org/viewvc/ddp/manuals/
+    trunk/release-notes/) per accedere ai singoli file tramite il web
+    e vedere le rispettive modifiche. Per maggiori informazioni su
+    come accedere a SVN, consultare le pagine su SVN del Debian
+    Documentation Project (https://www.debian.org/doc/cvs) .
+
+Capitolo 2. Cosa c'è di nuovo in Debian 9
+
+    Il Wiki (https://wiki.debian.org/NewInStretch) contiene ulteriori
+    informazioni su questo argomento.
+
+2.1. Architetture supportate
+
+    Debian 9 introduce una nuova architettura:
+
+      * MIPS little-endian a 64 bit (mips64el)
+
+    Debian 9 purtroppo rimuove il supporto per le seguenti
+    architetture:
+
+      * PowerPC (powerpc)
+
+    Le seguenti architetture sono ufficialmente supportate da Debian
+    9:
+
+      * PC a 32 bit (i386) e PC a 64 bit (amd64)
+
+      * ARM a 64 bit (arm64)
+
+      * ARM EABI (armel)
+
+      * ARMv7 (EABI hard-float ABI, armhf)
+   
+      * MIPS (mips (big-endian) e mipsel (little-endian))
+
+      * MIPS little-endian a 64 bit (mips64el)
+
+      * PowerPC little-endian a 64 bit (ppc64el)
+
+      * IBM System z (s390x)
+
+    Maggiori informazioni sullo stato dei port e informazioni
+    specifiche sul port per la propria architettura sono disponibili
+    nelle pagine web relative ai port di Debian (https://
+    www.debian.org/ports/) .
+
+2.2. Cosa c'è di nuovo nella distribuzione?
+
+    Ancora una volta la nuova versione di Debian contiene molto più
+    software rispetto alla precedente, jessie; la distribuzione
+    include più di 15346 nuovi pacchetti, per un totale di oltre
+    51687 pacchetti. La maggior parte del software nella
+    distribuzione è stata aggiornata: più di 29859 pacchetti software
+    (corrispondenti al 57% di tutti i pacchetti in jessie). Inoltre,
+    un notevole numero di pacchetti (oltre 6739, il 13% dei pacchetti
+    in jessie) è stato rimosso dalla distribuzione per diversi
+    motivi. Non ci saranno aggiornamenti per questi pacchetti ed essi
+    saranno marcati come «obsoleti» nelle interfacce dei programmi di
+    gestione dei pacchetti; vedere Sezione 4.8, «Pacchetti obsoleti».
+
+    Debian viene ancora una volta fornita con molti ambienti e
+    applicazioni desktop. Fra l'altro include ora gli ambienti
+    desktop GNOME 3.22, KDE Plasma 5.8, LXDE, LXQt 0.11, MATE 1.16 e
+    Xfce 4.12.
+
+    Anche le applicazioni per la produttività sono state aggiornate,
+    incluse le suite per l'ufficio:
+
+      * LibreOffice viene aggiornato alla versione 5.2;
+   
+      * Calligra viene aggiornato a 2.9.
+
+    Tra gli aggiornamenti di altre applicazioni per il desktop è
+    incluso l'aggiornamento di Evolution a 3.22.
+
+    Fra i molti altri, questa versione include anche i seguenti
+    aggiornamenti software:
+
+    +---------------------------------------------------------------+
+    |            Pacchetto            |Versione in 8 |Versione in 9 |
+    |                                 |   (jessie)   |  (stretch)   |
+    |---------------------------------+--------------+--------------|
+    |BIND Server DNS                  |9.9           |9.10          |
+    |---------------------------------+--------------+--------------|
+    |Emacs                            |24.4          |24.5 e 25.1   |
+    |---------------------------------+--------------+--------------|
+    |Exim, server predefinito per la  |4.84          |4.88          |
+    |posta elettronica                |              |              |
+    |---------------------------------+--------------+--------------|
+    |GNU Compiler Collection come     |4.9           |6.3           |
+    |compilatore predefinito          |              |              |
+    |---------------------------------+--------------+--------------|
+    |GnuPG                            |1.4           |2.1           |
+    |---------------------------------+--------------+--------------|
+    |Inkscape                         |0.48          |0.91          |
+    |---------------------------------+--------------+--------------|
+    |la libreria C GNU                |2.19          |2.24          |
+    |---------------------------------+--------------+--------------|
+    |Immagine del kernel Linux        |serie 3.16    |serie 4.9     |
+    |---------------------------------+--------------+--------------|
+    |MariaDB                          |10.0          |10.1          |
+    |---------------------------------+--------------+--------------|
+    |Nginx                            |1.6           |1.10          |
+    |---------------------------------+--------------+--------------|
+    |OpenJDK                          |7             |8             |
+    |---------------------------------+--------------+--------------|
+    |OpenSSH                          |6.7p1         |7.4p1         |
+    |---------------------------------+--------------+--------------|
+    |Perl                             |5.20          |5.24          |
+    |---------------------------------+--------------+--------------|
+    |PHP                              |5.6           |7.0           |
+    |---------------------------------+--------------+--------------|
+    |MTA Postfix                      |2.11          |3.1           |
+    |---------------------------------+--------------+--------------|
+    |PostgreSQL                       |9.4           |9.6           |
+    |---------------------------------+--------------+--------------|
+    |Python 3                         |3.4           |3.5           |
+    |---------------------------------+--------------+--------------|
+    |Samba                            |4.1           |4.5           |
+    |---------------------------------+--------------+--------------|
+    |Vim                              |7             |8             |
+    +---------------------------------------------------------------+
+
+2.2.1. CD, DVD e BD
+
+    La distribuzione ufficiale Debian richiede un numero variabile
+    fra 12 e 14 DVD di binari (secondo l'architettura) e 12 DVD di
+    sorgenti. Inoltre vi è un DVD multi-architettura, con un
+    sottoinsieme del rilascio per le architetture amd64 e i386 e il
+    codice sorgente. Debian è anche rilasciata come immagini Blu-ray 
+    (BD) e Blu-ray a doppio strato (DLBD) per le architetture amd64 e
+    i386 e anche per il codice sorgente. Debian veniva in passato
+    rilasciata anche come un grande insieme di CD per ciascuna
+    architettura, ma con il rilascio stretch questi sono stati
+    abbandonati.
+
+2.2.2. Sicurezza
+
+    Per il rilascio stretch la versione Debian del compilatore GNU
+    GCC 6 ora compila in modo predefinito «eseguibili indipendenti
+    dalla posizione» (PIE, Position Independet Executable). Di
+    conseguenza la stragrande maggioranza di tutti gli eseguibili ora
+    ha il supporto per la ASLR («Address Space Layout Randomization»,
+    randomizzazione della disposizione degli spazi di indirizzo)
+    (https://en.wikipedia.org/wiki/
+    Address_space_layout_randomization) che alleggerisce svariati
+    attacchi che sono ora probabilistici invece che deterministici.
+
+2.2.3. Versioni di GCC
+
+    Debian stretch include solamente la versione 6 del compilatore
+    GNU GCC e questo può essere un problema per gli utenti che si
+    aspettano sia disponibile la versione 4.x o 5.x. Vedere le pagine
+    del wiki GCC5 (https://wiki.debian.org/GCC5) eGCC6 (https://
+    wiki.debian.org/GCC6) per maggiori informazioni sulla
+    transizione.
+
+2.2.4. MariaDB sostituisce MySQL
+
+    MariaDB è ora la variante predefinita di MySQL in Debian, nella
+    versione 10.1. Il rilascio stretch introduce un nuovo meccanismo
+    per cambiare la variante predefinita, usando i metapacchetti
+    creati dal paccheto sorgente di mysql-defaults. Per esempio,
+    l'installazione del metapacchetto default-mysql-server installa
+    mariadb-server-10.1. Per gli utenti che avevano mysql-server-5.5
+    o mysql-server-5.6, questi vengono rimossi e sostituiti con
+    l'equivalente di MariaDB. In modo simile l'installazione di
+    default-mysql-client installa mariadb-client--10.1.
+
+    Importante
+
+    Notare che i formati di file dei dati binari del database non
+    sono compatibili all'indietro, perciò una volta fatto
+    l'aggiornamento a MariaDB 10.1 non si potrà tornare indietro a
+    una versione precedente di MariaDB o MySQL a meno di non avere un
+    dump appropriato del database. Perciò, prima dell'aggiornamento,
+    creare backup di tutti i database importanti usando uno strumento
+    appropriato come mysqldump.
+
+    I pacchetti virtual-mysql-* e default-mysql-* continueranno ad
+    esistere. MySQL continua ad essere mantenuto in Debian, nel
+    rilascio unstable. Vedere la pagina del wiki del Team Debian di
+    MySQL (https://wiki.debian.org/Teams/MySQL) per informazioni
+    aggiornate sul software relativo a mysql disponibile in Debian.
+
+2.2.5. Migliorie ad APT e alla struttura degli archivi
+
+    Il gestore di pacchetti apt ha visto diversi miglioramenti da
+    jessie in poi. La maggior parte di essi valgono anche per
+    aptitude. Quella che segue è una selezione di alcuni dei
+    principali:
+
+    Sul fronte della sicurezza, APT ora rifiuta in modo predefinito i
+    codici di controllo più deboli (es. SHA1) e cerca di scaricare
+    come utente non privilegiato. Per maggiori informazioni fare
+    riferimento a Sezione 5.3.2.3, «Nuovi requisiti per repository
+    APT» e Sezione 5.3.2.1, «APT ora recupera i file con un utente
+    non privilegiato (_apt)».
+
+    Anche i gestori di pacchetti basati su APT hanno avuto svariati
+    miglioramenti che rimuovono il noioso avvertimento «hash sum
+    mismatch» che si verifica quando si esegue apt durante una
+    sincronizzazione del mirror. Ciò grazie alla nuova struttura
+    by-hash che permette ad APT di scaricare i file dei metadati in
+    base all'hash del loro contenuto.
+
+    Se si usano repository di terze parti si potrebbero comunque
+    avere saltuariamente questi problemi, se il produttore non
+    fornisce la struttura by-hash. È consigliato raccomandargli di
+    adottare questa modifica della struttura. Una breve descrizione
+    tecnica è disponibile nella descrizione del formato dei
+    repository (https://wiki.debian.org/DebianRepository/Format) .
+
+    Sebbene possa essere interessante soprattutto per gli
+    amministratori di mirror, APT in stretch può usare record DNS
+    (SRV) per localizzare un backend HTTP. Ciò è utile per fornire un
+    semplice nome DNS e poi gestire backend attraverso DNS invece che
+    usare un servizio «redirector». Questa funzionalità è usata anche
+    dal nuovo mirror Debian descritto in Sezione 2.2.6, «Nuovo mirror
+    deb.debian.org».
+
+2.2.6. Nuovo mirror deb.debian.org
+
+    Debian fornisce ora un nuovo servizio aggiuntivo chiamato
+    deb.debian.org (https://deb.debian.org) . Fornisce il contenuto
+    dell'archivio principale, dell'archivio di sicurezza, dei port e
+    anche il nostro nuovo archivio debug (vedere Sezione 2.2.8, «Un
+    nuovo archivio per i simboli di debug») in un unico nome host
+    facile da ricordare.
+
+    Questo servizio si basa sul nuovo supporto per DNS in APT, ma
+    ripiega sull'uso di una regolare redirezione per l'accesso HTTPS
+    o per versioni più vecchie di APT. Ulteriori dettagli sono
+    forniti su deb.debian.org (https://deb.debian.org) .
+
+    Grazie a Fastly e ad Amazon CloudFront per aver sponsorizzato i
+    backend CDN dietro a questo servizio.
+
+2.2.7. Passaggio a GnuPG «moderno»
+
+    Il rilascio stretch è la prima versione di Debian ad avere il
+    ramo «Modern» di GnuPG nel pacchetto gnupg. Ciò fornisce la
+    crittografia a curva ellittica, migliori valori predefiniti,
+    un'architettura più modulare e un supporto migliorato per
+    smartcard. Il ramo moderno inoltre non supporta esplicitamente
+    alcuni formati più vecchi noti come difettosi (come PGPv3). Per
+    maggiori informazioni vedere /usr/share/doc/gnupg/README.Debian.
+
+    Il ramo «classico» di GnuPG continuerà ad essere fornito come
+    gnupg1 per coloro che ne hanno bisogno ma è ora deprecato.
+
+2.2.8. Un nuovo archivio per i simboli di debug
+
+    Nota
+
+    Questa sezione è interessante soprattutto per gli sviluppatori o
+    se si desidera allegare uno stack trace completo ad una
+    segnalazione di crash.
+
+    In passato l'archivio principale Debian includeva i pacchetti
+    contenenti i simboli di debug per librerie e programmi
+    selezionati. Con stretch, la maggior parte di essi è stata
+    spostata in un archivio separato chiamato archivio debian-debug.
+    Questo archivio contiene i pacchetti dei simboli di debug per la
+    stragrande maggioranza di tutti i pacchetti forniti in Debian.
+
+    Se si desidera scaricare tali pacchetti di debug includere la riga
+    seguente nelle proprie fonti di APT:
+
+    deb http://debug.mirrors.debian.org/debian-debug/ stretch-debug main
+
+    In alternativa si possono anche ottenere da snapshot.debian.org
+    (http://snapshot.debian.org) .
+
+    Una volta abilitati si possono ottenere i simboli di debug per un
+    determinato pacchetto installando pacchetto-dbgsym. Notare che
+    singoli pacchetti potrebbero ancora fornire un pacchetto
+    pacchetto-dbg nell'archivio principale invece che nel nuovo
+    dbgsym.
+
+2.2.9. Nuovo metodo per assegnare nomi alle interfacce di rete
+
+    L'installatore e i sistemi di nuova installazione usano un nuovo
+    schema standard per assegnare nomi alle interfacce di rete,
+    invece di eth0, eth1, ecc. Il vecchio metodo di assegnazione dei
+    nomi era affetto da race condition sull'enumerazione che faceva
+    sì che i nomi delle interfacce potessero cambiare in modo
+    inaspettato ed è incompatibile con il montaggio del file system
+    radice in sola lettura. Il nuovo metodo di numerazione si base su
+    più fonti di informazioni, per produrre un risultato più
+    ripetibile. Utilizza numeri di indici forniti da firmware/BIOS e
+    poi cerca i numeri di slot delle schede PCI, producendo nomi come
+    ens0 o enp1s1 (Ethernet) oppure wlp3s0 (wlan). I dispositivi USB,
+    che possono essere aggiunti al sistema in qualsiasi momento,
+    hanno nomi basati sul loro indirizzo MAC Ethernet.
+
+    Questa modifica non si applica agli aggiornamenti dei sistemi
+    jessie; l'assegnazione dei nomi continuerà ad essere decisa da /
+    etc/udev/rules.d/70-persistent-net.rules. Per maggiori
+    informazioni vedere /usr/share/doc/udev/README.Debian.gz o la
+    documentazione a monte (https://www.freedesktop.org/wiki/Software
+    /systemd/PredictableNetworkInterfaceNames/) .
+
+2.2.10. Novità dal Blend Debian Med
+
+    Oltre a svariati nuovi pacchetti e aggiornamenti per il software
+    pensato per le scienze della vita e la medicina, il team Debian
+    Med ha nuovamente focalizzato l'impegno sulla qualità dei
+    pacchetti forniti. In un progetto GSoC e un progetto Outreachy
+    due studenti hanno lavorato sodo per aggiungere il supporto per
+    Integrazione Continua (CI) ai pacchetti con le statistiche
+    popularity-contest d'uso più alte. Anche il recente sprint Debian
+    Med in Bucarest si è concentrato sul test dei pacchetti.
+
+    Per installare i pacchetti mantenuti dal team Debian Med,
+    installare i metapacchetti chiamati med-* che sono alla versione
+    3.0.1 per Debian stretch. Visitare le pagine delle attività
+    Debian Med (http://blends.debian.org/med/tasks) per vedere
+    l'intera gamma del software per biologia e medicina disponibile
+    in Debian.
+
+2.2.11. Il server Xorg non richiede più di essere root
+
+    Nella versione di Xorg in stretch è possibile eseguire il server
+    Xorg come utente regolare, invece di root. Ciò riduce il rischio
+    della scalata di privilegi («privilege escalation») usando bug
+    nel server X. Tuttavia per funzionare ha alcuni requisiti:
+
+      * Necessita di logind e libpam-systemd.
+
+      * Il sistema deve avere il supporto per il Kernel Mode Setting
+        (KMS). Perciò può non funzionare in alcuni ambienti di
+        virtualizzazione (ad esempio virtualbox) o se il kernel non
+        ha un driver che supporti la scheda grafica in uso.
+
+      * Necessita di essere eseguito nella console virtuale da cui è
+        stato avviato.
+
+      * Solo il display manager gdm3 supporta l'esecuzione di X come
+        utente non privilegiato in stretch. Gli altri display manager
+        continueranno sempre a eseguire X come root. In alternativa
+        si può anche avviare X manualmente come utente non root in un
+        terminale virtuale usando startx.
+
+    Quando in esecuzione come utente regolare, il file di log di Xorg
+    sarà disponibile in ~/.local/share/xorg/.
+
+Capitolo 3. Sistema d'installazione
+
+    L'installatore Debian è il sistema d'installazione ufficiale per
+    Debian. Offre molti metodi d'installazione, la cui disponibilità
+    dipende dall'architettura del proprio sistema.
+
+    Le immagini dell'installatore per stretch possono essere trovate,
+    insieme alla guida all'installazione, sul sito web di Debian
+    (https://www.debian.org/releases/stretch/debian-installer/) .
+
+    La guida all'installazione è inclusa anche nel primo CD/DVD dei
+    set ufficiali di Debian, in:
+
+    /doc/install/manual/lingua/index.html
+
+    Si possono anche verificare le errata corrige (https://
+    www.debian.org/releases/stretch/debian-installer/index#errata)
+    dell'installatore Debian per un elenco di problematiche note.
+
+3.1. Cosa c'è di nuovo nel sistema di installazione?
+
+    L'installatore Debian ha fatto molti passi avanti dalla
+    precedente versione rilasciata ufficialmente con Debian 8,
+    raggiungendo un migliore supporto all'hardware e alcune nuove e
+    interessanti funzionalità.
+
+    In queste note di rilascio sono elencati solo i principali
+    cambiamenti dell'installatore. Per una panoramica dei dettagli
+    delle modifiche da jessie, consultare gli annunci dei rilasci
+    beta e RC di stretch, disponibili nella cronologia delle notizie
+    dell'installatore Debian (https://www.debian.org/devel/
+    debian-installer/News/) .
+
+3.1.1. Cambiamenti principali
+
+    Port rimossi
+
+        È stato rimosso il supporto per l'architettura powerpc.
+
+    Nuovi port
+
+        È stato aggiunto all'installatore il supporto per
+        l'architettura mips64el.
+
+    Selezione del desktop
+
+        A partire da jessie il desktop può essere scelto all'interno
+        di tasksel durante l'installazione e si possono scegliere più
+        desktop contemporaneamente.
+
+    Nuove lingue
+
+        Grazie agli enormi sforzi dei traduttori, Debian può ora
+        essere installato in 75 lingue, compreso l'inglese. La
+        maggior parte delle lingue è disponibile sia con
+        l'interfaccia testuale sia con l'interfaccia grafica, mentre
+        alcune sono disponibili solo con l'interfaccia grafica.
+
+        Le lingue che possono essere selezionate solo usando
+        l'installatore grafico, in quanto i loro set di caratteri non
+        possono essere presentati in modalità non-grafica, sono:
+        amarico, bengalese, dzongkha, gujarati, hindi, georgiano,
+        kannada, khmer, malayalam, marathi, nepalese, punjabi, tamil,
+        telegu, tibetano e uiguro.
+
+    Avvio da UEFI
+
+        L'installatore di stretch migliora il supporto per molto
+        firmware UEFI e permette anche l'installazione su firmware
+        UEFI a 32 bit con un kernel a 64 bit.
+
+        Notare che questo non include il supporto per il Secure Boot
+        UEFI.
+   
+    Nuovo metodo per assegnare nomi alle interfacce di rete
+
+        L'installatore e i sistemi installati usano un nuovo schema
+        standard per assegnare nomi alle interfacce di rete. ens0 o
+        enp1s1 (Ethernet) oppure wlp3s0 (wlan) sostituiranno i vecchi
+        eth0, eth1, ecc. Vedere Sezione 2.2.9, «Nuovo metodo per
+        assegnare nomi alle interfacce di rete» per maggiori
+        informazioni.
+
+    Le immagini multi-arch ora usano in modo predefinito amd64
+
+        Dato che i PC a 64 bit sono diventati più comuni,
+        l'architettura predefinita delle immagini multi-arch è ora
+        amd64 invece di i386.
+
+    I set completi di CD sono stati rimossi
+
+        I set completi di CD non vengono più generati. Le immagini di
+        DVD sono sempre disponibili, così come lo è l'immagine di CD
+        netinst.
+
+        Inoltre, dato che l'installatore ora fornisce un modo facile
+        per selezionare il desktop scelto dall'interno di tasksel,
+        solo il CD 1 di Xfce rimane come sistema desktop su singolo
+        CD.
+
+    Accessibilità nell'installatore e nel sistema installato
+
+        L'installatore emette due «bip» sonori invece di uno quando
+        avviato con grub, perciò gli utenti sanno se devono usare il
+        metodo per grub per modificare le voci.
+
+        Il desktop MATE è quello predefinito quando viene usato
+        brltty o espeakup nell'installatore Debian.
+
+    Aggiunto il supporto per HTTPS
+
+        Il supporto per HTTPS è stato aggiunto all'installatore,
+        permettendo di scaricare i pacchetti da mirror HTTPS.
+
+3.1.2. Installazione automatizzata
+
+    Alcuni cambiamenti menzionati nella sezione precedente implicano
+    anche modifiche al supporto nell'installatore per installazioni
+    automatizzate con l'uso di file di preconfigurazione. Ciò
+    significa che se si possiedono file preconfigurati che
+    funzionavano con l'installatore di jessie non ci si può attendere
+    che questi funzionino anche con la nuova versione senza
+    modifiche.
+
+    La Guida all'installazione (https://www.debian.org/releases/
+    stretch/installmanual) include un'appendice separata aggiornata
+    con una documentazione estesa sull'uso di preconfigurazioni.
+
+Capitolo 4. Aggiornamenti da Debian 8 (jessie)
+
+4.1. Preparazione all'aggiornamento
+
+    Prima di procedere all'aggiornamento si consiglia di leggere
+    anche le informazioni contenute in Capitolo 5, Problemi di cui
+    essere al corrente per stretch, dove vengono trattati i
+    potenziali problemi non direttamente collegati al processo di
+    aggiornamento, ma che potrebbe essere comunque importante
+    conoscere prima di iniziare.
+
+4.1.1. Salvare i dati e le informazioni di configurazione
+
+    Prima di aggiornare il proprio sistema si raccomanda di
+    effettuare un salvataggio completo o quantomeno una copia di
+    sicurezza di tutti quei dati e quelle informazioni di
+    configurazione che non ci si può permettere di perdere. Gli
+    strumenti e i processi di aggiornamento sono abbastanza
+    affidabili, ma un problema dell'hardware durante l'aggiornamento
+    potrebbe generare un sistema fortemente danneggiato.
+
+    Le cose principali che si potrebbe considerare di salvare sono i
+    contenuti di /etc, /var/lib/dpkg, /var/lib/apt/extended_states e
+    l'output di dpkg --get-selections "*" (le virgolette sono
+    importanti). Se si usa aptitude per gestire i pacchetti, si
+    dovrebbe salvare anche /var/lib/aptitude/pkgstates.
+
+    Il processo di aggiornamento in quanto tale non modifica nulla
+    nelle directory /home, tuttavia alcune applicazioni (come ad
+    esempio alcune parti della suite Mozilla e gli ambienti desktop
+    GNOME e KDE) sovrascrivono le impostazioni dell'utente
+    preesistenti con i nuovi valori predefiniti quando un utente
+    avvia per la prima volta la nuova versione dell'applicazione. Per
+    precauzione si potrebbe quindi voler fare una copia di sicurezza
+    dei file e delle directory nascosti («dotfile», cioè file i cui
+    nomi iniziano con un punto) che si trovano nelle directory «home»
+    degli utenti. Tale copia potrebbe aiutare a ripristinare o a
+    ricreare le vecchie impostazioni. Potrebbe anche essere il caso
+    di informare gli utenti su questo argomento.
+
+    Tutte le installazioni di pacchetti devono essere eseguite con i
+    privilegi di superutente, per cui è necessario effettuare il
+    login come utente root, oppure usare su o sudo, per ottenere i
+    diritti d'accesso necessari.
+
+    L'aggiornamento ha alcune condizioni preliminari; prima di
+    eseguirlo si dovrebbe verificarle.
+
+4.1.2. Informare gli utenti in anticipo
+
+    È saggio informare in anticipo tutti gli utenti di qualunque
+    aggiornamento si stia pianificando, anche se gli utenti che
+    accedono al sistema tramite una connessione ssh non dovrebbero
+    notare granché durante l'aggiornamento e dovrebbero poter
+    continuare a lavorare.
+
+    Se si desidera prendere delle precauzioni supplementari, si
+    esegua un salvataggio delle partizioni degli utenti (/home) o le
+    si smonti prima di aggiornare il sistema.
+
+    Con l'aggiornamento a stretch si dovrà anche fare un
+    aggiornamento del kernel, per cui sarà necessario riavviare il
+    sistema. Tipicamente ciò verrà fatto dopo che l'aggiornamento è
+    terminato.
+
+4.1.3. Preparazione all'indisponibilità dei servizi
+
+    Tra i pacchetti interessati all'aggiornamento ce ne potrebbero
+    essere alcuni a cui sono associati dei servizi. In questo caso,
+    tali servizi saranno fermati mentre è in corso la sostituzione o
+    la configurazione dei pacchetti. In questo periodo di tempo i
+    servizi non saranno disponibili.
+
+    La durata del disservizio varia a seconda del numero di pacchetti
+    da aggiornare sul sistema e comprende anche il tempo che occorre
+    all'amministratore di sistema per rispondere alle domande sulla
+    configurazione poste dall'aggiornamento dei pacchetti. Notare che
+    se l'aggiornamento non è presidiato e il sistema richiede una
+    risposta per andare avanti è probabile che i servizi rimangano
+    non disponibili^[1] per un periodo di tempo considerevole.
+
+    Se il sistema in fase di aggiornamento fornisce servizi critici
+    per gli utenti o la rete^[2], è possibile ridurre il tempo di
+    disservizio facendo un aggiornamento minimo, come descritto in
+    Sezione 4.4.4, «Aggiornamento minimo del sistema», seguito da un
+    aggiornamento del kernel, un riavvio e poi l'aggiornamento dei
+    pacchetti associati ai servizi critici. Fare l'aggiornamento di
+    questi pacchetti prima di fare l'aggiornamento completo descritto
+    in Sezione 4.4.5, «Aggiornamento del sistema». Questo metodo
+    assicura che i servizi critici restino in funzione mentre è in
+    corso l'aggiornamento completo del sistema e che il periodo di
+    disservizio sia breve.
+
+4.1.4. Preparazione per il ripristino
+
+    Sebbene Debian cerchi di garantire che il sistema rimanga sempre
+    in uno stato avviabile, c'è sempre la possibilità che si abbiano
+    problemi a riavviare il sistema dopo l'aggiornamento. I
+    potenziali problemi che sono noti sono documentati in questo e
+    nei prossimi capitoli delle presenti note di rilascio.
+
+    Pertanto è sensato assicurarsi di essere in grado di ripristinare
+    il proprio sistema se questo non riesce a riavviarsi o a tirare
+    su la rete, se è gestito da remoto.
+
+    Se si sta aggiornando da remoto tramite una connessione ssh è
+    fortemente raccomandato prendere tutte le precauzioni necessarie
+    per essere in grado di accedere al server tramite un terminale
+    seriale remoto. È possibile che, dopo l'aggiornamento del kernel
+    e il riavvio del sistema, si debba sistemare la configurazione
+    del sistema tramite una console locale. Analogamente, se il
+    sistema viene accidentalmente riavviato nel mezzo di un
+    aggiornamento è possibile che lo si debba ripristinare usando una
+    console locale.
+
+    Per il ripristino d'emergenza generalmente viene raccomandato di
+    usare è la modalità di ripristino dell'installatore di Debian
+    stretch. Il vantaggio di usare l'installatore consiste nel fatto
+    che è possibile scegliere fra i suoi numerosi metodi per trovare
+    quello che meglio corrisponde alla propria situazione. Per
+    maggiori informazioni si consulti la sezione «Recupero di un
+    sistema danneggiato» nel capitolo 8 della Guida all'installazione
+    (https://www.debian.org/releases/stretch/installmanual) e le FAQ
+    dell'installatore di Debian (https://wiki.debian.org/
+    DebianInstaller/FAQ) .
+
+    Se questa operazione non riesce, sarà necessario trovare un modo
+    alternativo per avviare il proprio sistema in modo da potervi
+    accedere per ripararlo. Una possibilità è l'utilizzo di
+    un'immagine di ripristino speciale o di un CD live di Linux. Dopo
+    aver avviato in tal modo, si dovrebbe essere in grado di montare
+    il proprio file system radice ed entrarvi con chroot per trovare
+    e correggere il problema.
+
+4.1.4.1. Shell di debug durante l'avvio con initrd
+
+    Il pacchetto initramfs-tools include una shell di debug^[3] negli
+    initrd che genera. Per esempio, se initrd non è in grado di
+    montare il file system radice si verrà rimandati in questa shell
+    di debug, la quale mette a disposizione i comandi di base per
+    trovare il problema e, se possibile, risolverlo.
+
+    Le cose di base da controllare sono: la presenza dei file device
+    corretti in /dev, quali moduli vengono caricati (cat /proc/
+    modules) e l'output di dmesg per gli errori durante il
+    caricamento dei driver. L'output di dmesg mostra inoltre quali
+    file device sono stati assegnati a quali dischi; questi risultati
+    andranno confrontati con l'output di echo $ROOT, per assicurarsi
+    che il file system radice sia sul device atteso.
+
+    Se si è riusciti a risolvere il problema, digitando exit si
+    uscirà dalla shell di debug e si continuerà il processo di avvio
+    a partire dal punto in cui il problema si è verificato.
+    Naturalmente sarà anche necessario risolvere il problema
+    sottostante e rigenerare initrd in modo che il prossimo avvio non
+    fallisca nuovamente.
+
+4.1.4.2. Shell di debug durante l'avvio con systemd
+
+    Se l'avvio fallisce con systemd è possibile ottenere una shell
+    root di debug cambiando la riga di comando del kernel. Se l'avvio
+    di base ha successo, ma l'avvio di alcuni servizi fallisce, può
+    essere utile aggiungere systemd.unit=rescue.target ai parametri
+    del kernel.
+
+    Atrimenti il parametro systemd.unit=emergency.target del kernel
+    fornirà una shell di root non appena possibile. Tuttavia ciò
+    viene fatto prima del montaggio del file system radice con
+    permessi in lettura e scrittura. Sarà necessario farlo
+    manualmente con:
+
+    mount -o remount,rw /
+
+    Ulteriori informazioni su come fare il debug di un avvio non
+    funzionante con systemd possono essere trovate nell'articolo
+    Diagnosing Boot Problems (http://freedesktop.org/wiki/Software/
+    systemd/Debugging/) .
+
+4.1.5. Preparazione di un ambiente sicuro per l'aggiornamento
+
+    L'aggiornamento della distribuzione dovrebbe essere eseguito o da
+    locale, da una console virtuale in modalità testo (o da un
+    terminale seriale collegato direttamente), o da remoto, tramite
+    una connessione ssh.
+
+    Importante
+
+    I servizi VPN (quali tinc) potrebbero non essere disponibili
+    durante l'aggiornamento. Consultare Sezione 4.1.3, «Preparazione
+    all'indisponibilità dei servizi».
+
+    Per ottenere un margine supplementare di sicurezza durante
+    l'aggiornamento da remoto si suggerisce di eseguire i processi di
+    aggiornamento nella console virtuale fornita dal programma screen
+    , che consente la riconnessione sicura e garantisce che il
+    processo di aggiornamento non venga interrotto nemmeno nel caso
+    in cui il processo di connessione remota si interrompa.
+
+    Importante
+
+    Non si dovrebbe eseguire l'aggiornamento usando telnet, rlogin, 
+    rsh, o da una sessione X gestita da xdm, gdm o kdm e simili sul
+    sistema che si sta aggiornando, poiché ciascuno di questi servizi
+    potrebbe essere terminato durante l'aggiornamento, generando
+    quindi un sistema inaccessibile e aggiornato solo a metà. L'uso
+    dell'applicazione GNOME update-manager per l'aggiornamento alla
+    nuova versione è fortemente sconsigliato poiché tale programma fa
+    affidamento sul fatto che la sessione desktop rimanga attiva.
+
+4.2. Verifica dello stato del sistema
+
+    Il processo di aggiornamento descritto nel presente capitolo è
+    stato concepito per aggiornamenti da sistemi jessie «puri», ossia
+    senza pacchetti di terze parti. Per ottenere un processo di
+    aggiornamento il più affidabile possibile si potrebbero voler
+    rimuovere i pacchetti di terze parti dal proprio sistema prima di
+    iniziare l'aggiornamento.
+
+    Di seguito vengono indicati due metodi per trovare questo tipo di
+    pacchetti usando aptitude o apt-forktracer. Notare che nessuno
+    dei due è accurato al 100% (per esempio, quello con aptitude
+    elenca i pacchetti che erano una volta forniti da Debian ma che
+    non lo sono più, come i vecchi pacchetti del kernel).
+
+    $ aptitude search '~i(!~ODebian)'
+    $ apt-forktracer | sort
+
+    L'aggiornamento diretto dalle versioni di Debian precedenti a 8
+    (jessie) non è supportato. Seguire le istruzioni nelle Note di
+    rilascio per Debian 8 (https://www.debian.org/releases/jessie/
+    releasenotes) per aggiornare prima a 8.
+
+    Questa procedura presume altresì che il proprio sistema sia stato
+    aggiornato fino all'ultimo aggiornamento disponibile per jessie:
+    se non è così o non si è sicuri, si seguano le istruzioni
+    contenute in Sezione A.1, «Aggiornare il proprio sistema jessie».
+
+4.2.1. Rivedere le azioni in sospeso nel gestore di pacchetti
+
+    In certi casi l'uso di apt-get per l'installazione di pacchetti
+    in sostituzione di aptitude potrebbe far sì che aptitude
+    consideri un pacchetto come «inutilizzato» e ne programmi la
+    rimozione. In generale, ci si dovrebbe accertare che il proprio
+    sistema sia completamente aggiornato e «pulito» prima di
+    procedere all'aggiornamento.
+
+    Pertanto bisognerebbe controllare se vi sono operazioni in
+    sospeso nel gestore di pacchetti aptitude: se è programmato
+    l'aggiornamento o la rimozione di un pacchetto, questo potrebbe
+    influire negativamente sul processo di aggiornamento. Si noti che
+    la correzione di questa situazione è possibile solo se il proprio
+    sources.list punta tuttora a jessie e non a stable o a stretch. A
+    tale proposito si consulti Sezione A.2, «Controllare la propria
+    lista delle fonti».
+
+    A tal fine è necessario eseguire avviare aptitude in modalità a
+    tutto terminale e premere g («Installa/Rimuovi pacchetti»). Se
+    viene mostrata una qualsiasi azione, si dovrebbe controllarla e o
+    risolverla o eseguirla. Se non viene proposta alcuna azione sarà
+    mostrato il messaggio «Non ci sono pacchetti da installare,
+    rimuovere o aggiornare».
+
+4.2.2. Disattivare il pinning di APT
+
+    Se si è configurato APT in modo da installare taluni pacchetti da
+    una distribuzione diversa da stable (ad esempio da testing), si
+    potrebbe dover modificare la configurazione del pinning del
+    proprio APT (memorizzata in /etc/apt/preferences e /etc/apt/
+    preferences.d/) in modo da consentire l'aggiornamento dei
+    pacchetti alle versioni nel nuovo rilascio stable. Maggiori
+    informazioni sul pinning di APT sono disponibili in 
+    apt_preferences(5).
+
+4.2.3. Verifica dello stato dei pacchetti
+
+    Si raccomanda di controllare dapprima lo stato di tutti i
+    pacchetti e di verificare che tutti siano in uno stato
+    aggiornabile, indipendentemente dal metodo usato per
+    l'aggiornamento. Il comando seguente mostrerà tutti i pacchetti
+    con uno stato «Half-Installed» o «Failed-Config» e quelli con un
+    qualsiasi stato di errore.
+
+    # dpkg --audit
+
+    È anche possibile controllare lo stato di tutti i pacchetti sul
+    proprio sistema usando aptitude o con comandi come ad esempio
+
+    # dpkg -l | pager
+
+     o
+
+    # dpkg --get-selections "*" > ~/curr-pkgs.txt
+
+    È auspicabile la rimozione di qualsiasi blocco prima
+    dell'aggiornamento. Se qualsiasi pacchetto essenziale per
+    l'aggiornamento è bloccato («on hold») l'aggiornamento fallirà.
+
+    Si noti che aptitude usa un metodo differente per registrare i
+    pacchetti bloccati rispetto ad apt-get e dselect. È possibile
+    identificare i pacchetti bloccati per aptitude eseguendo
+
+    # aptitude search "~ahold"
+
+    Se si desidera controllare quali pacchetti erano bloccati per 
+    apt-get, si dovrebbe eseguire
+
+    # dpkg --get-selections | grep 'hold$'
+
+    Se un pacchetto è stato modificato e ricompilato localmente, e
+    non lo si è rinominato né vi si è aggiunto un numero di epoca
+    nella versione, è necessario bloccarlo per impedire che venga
+    aggiornato.
+
+    Lo stato «bloccato» di un pacchetto per apt-get può essere
+    modificato eseguendo il comando:
+
+    # echo nome_pacchetto hold | dpkg --set-selections
+
+    Si sostituisca hold con install per rimuovere lo stato «bloccato»
+    del pacchetto.
+
+    Se c'è bisogno di sistemare qualcosa è meglio controllare che il
+    proprio sources.list punti sempre a jessie come illustrato in
+    Sezione A.2, «Controllare la propria lista delle fonti».
+
+4.2.4. La sezione «proposed-updates» (aggiornamenti proposti)
+
+    Se la sezione proposed-updates è elencata nel proprio /etc/apt/
+    sources.list, la si dovrebbe rimuovere da quel file prima di
+    tentare l'aggiornamento del sistema. Questa precauzione serve per
+    ridurre il rischio di conflitti.
+
+4.2.5. Fonti non ufficiali
+
+    Se si ha un qualsiasi pacchetto non-Debian nel proprio sistema,
+    si presti attenzione al fatto che questi possono essere rimossi
+    durante l'aggiornamento a causa di conflitti di dipendenze. Se
+    questi pacchetti sono stati installati aggiungendo un archivio di
+    pacchetti supplementare nel proprio /etch/apt/sources.list, si
+    dovrebbe controllare che tale archivio offra anche pacchetti
+    compilati per stretch e modificare di conseguenza la riga della
+    fonte contemporaneamente alle righe delle fonti per i pacchetti
+    Debian.
+
+    Alcuni utenti potrebbero avere installate nel proprio sistema
+    jessie versioni non ufficiali «più recenti» da backport di
+    pacchetti che sono in Debian. Tali pacchetti sono i candidati più
+    probabili a causare problemi durante un aggiornamento, in quanto
+    potrebbero generare conflitti fra file^[4]. Sezione 4.5,
+    «Possibili problemi durante l'aggiornamento» contiene alcune
+    informazioni su come gestire i conflitti tra file nel caso si
+    verifichino.
+
+4.3. Preparazione delle fonti per APT
+
+    Prima di iniziare l'aggiornamento è necessario predisporre per le
+    liste dei pacchetti il file di configurazione di apt, /etc/apt/
+    sources.list.
+
+    apt prenderà in considerazione tutti i pacchetti che possono
+    essere trovati tramite le righe «deb» e installerà il pacchetto
+    con il numero di versione più alto, dando la priorità alle righe
+    menzionate per prime (in questo modo, nel caso in cui siano
+    presenti varie fonti equivalenti, tipicamente si dovrebbe
+    menzionare per primo un disco fisso locale, poi i CD-ROM e infine
+    i mirror remoti).
+
+    Si fa spesso riferimento a un rilascio sia tramite il suo nome in
+    codice (ad esempio jessie, stretch), sia tramite la denominazione
+    del suo stato (cioè oldstable, stable, testing, unstable). Fare
+    riferimento ad un rilascio attraverso il suo nome in codice
+    presenta il vantaggio che non si sarà mai sorpresi da un nuovo
+    rilascio, pertanto è il metodo qui adottato. Questo naturalmente
+    significa che si dovrà prestare attenzione agli annunci di
+    rilascio. Se invece si utilizza la denominazione dello stato, si
+    vedrà una grande quantità di aggiornamenti disponibili per i
+    propri pacchetti non appena avviene un rilascio.
+
+    Debian fornisce due mailing-list per gli annunci che aiutano a
+    rimanere aggiornati sulle informazioni importanti relative ai
+    rilasci di Debian:
+
+      * Iscrivendosi alla mailing-list degli annunci Debian (https://
+        lists.debian.org/debian-announce/) si riceverà una notifica
+        ogni volta che Debian fa un nuovo rilascio, ad esempio come
+        quando stretch passa da stable a oldstable.
+
+      * Iscrivendosi alla mailing-list degli annunci di sicurezza di
+        Debian (https://lists.debian.org/debian-security-announce/)
+        si riceverà una notifica ogni volta che Debian pubblica un
+        annuncio di sicurezza.
+
+4.3.1. Aggiunta di fonti internet per APT
+
+    La configurazione predefinita prevede l'installazione dai
+    principali server internet di Debian, ma si potrebbe voler
+    modificare il proprio /etc/apt/sources.list in modo che usi i
+    mirror, preferibilmente uno più vicino dal punto di vista della
+    rete.
+
+    Gli indirizzi dei mirror di Debian sono reperibili in https://
+    www.debian.org/distrib/ftplist (https://www.debian.org/distrib/
+    ftplist) (si guardi la sezione «Elenco dei mirror Debian»).
+    Notare che i mirror FTP stanno per essere chiusi, vedere
+    Sezione A.2, «Controllare la propria lista delle fonti».
+
+    Per esempio, si supponga che il proprio mirror Debian più vicino
+    sia http://mirrors.kernel.org. Ispezionandolo con un browser web
+    si noterà che le directory principali sono organizzate nel modo
+    seguente:
+
+    http://mirrors.kernel.org/debian/dists/stretch/main/binary-s390x/...
+    http://mirrors.kernel.org/debian/dists/stretch/contrib/binary-s390x/...
+
+    Per poter utilizzare questo mirror con apt, si aggiungerà al
+    proprio file sources.list la seguente riga:
+
+    deb http://mirrors.kernel.org/debian stretch main contrib
+
+    Si noti che «dists» è aggiunto implicitamente e che gli argomenti
+    che seguono il nome del rilascio sono utilizzati per espandere il
+    percorso su directory multiple.
+
+    Dopo aver aggiunto le nuove fonti, si disabilitino le righe «deb»
+    preesistenti in sources.list, ponendovi davanti un simbolo
+    cancelletto (#).
+
+4.3.2. Aggiunta di fonti per APT da mirror locale
+
+    Anziché usare mirror HTTP dei pacchetti, si potrebbe voler
+    modificare /etc/apt/sources.list in modo che usi un mirror su un
+    disco locale (eventualmente montato su NFS).
+
+    Per esempio, il proprio mirror dei pacchetti potrebbe essere in /
+    var/local/debian/ e avere le directory principali come segue:
+
+    /var/local/debian/dists/stretch/main/binary-s390x/...
+    /var/local/debian/dists/stretch/contrib/binary-s390x/...
+
+    Per poter utilizzare questo mirror con apt, si aggiunga questa
+    riga al proprio sources.list:
+
+    deb file:/var/local/debian stretch main contrib
+
+    Si noti che «dists» è aggiunto implicitamente e che gli argomenti
+    che seguono il nome del rilascio sono utilizzati per espandere il
+    percorso su directory multiple.
+
+    Dopo aver aggiunto le nuove fonti, si disabilitino le righe «deb»
+    preesistenti in sources.list, ponendovi davanti un simbolo
+    cancelletto (#).
+
+4.3.3. Aggiunta di fonti per APT da supporti ottici
+
+    Se si vogliono utilizzare soltanto CD (o DVD o dischi Blu-ray) si
+    disabilitino, commentandole, le righe «deb» preesistenti in /etc/
+    apt/sources.list, ponendovi davanti un simbolo cancelletto (#).
+
+    Ci si accerti che in /etc/fstab ci sia una riga che abiliti la
+    possibilità di montare la propria unità CD-ROM nel punto di
+    montaggio /media/cdrom. Per esempio, se l'unità del CD-ROM è /dev
+    /sr0, /etc/fstab dovrebbe contenere una riga come la seguente:
+
+    /dev/sr0 /media/cdrom auto noauto,ro 0 0
+
+    Si noti che non ci devono essere spazi fra le parole noauto,ro
+    nel quarto campo.
+
+    Per verificare il funzionamento, inserire un CD e provare a
+    eseguire
+
+    # mount /media/cdrom    # questo monta il CD nel punto di montaggio
+    # ls -alF /media/cdrom  # questo dovrebbe mostrare la directory radice del CD
+    # umount /media/cdrom   # questo smonta il CD
+
+    Poi, si esegua:
+
+    # apt-cdrom add
+
+    per ciascun CD-ROM di binari di Debian che si possiede, al fine
+    di aggiungere i dati di ciascun CD al database di APT.
+
+4.4. Aggiornare i pacchetti
+
+    Il metodo raccomandato per l'aggiornamento dalle versioni
+    precedenti di Debian prevede l'utilizzo del gestore dei pacchetti
+    apt-get. Nelle versioni precedenti era consigliato aptitude per
+    questo scopo, ma le versioni più recenti di apt-get forniscono
+    delle funzionalità equivalenti e si sono anche dimostrate più
+    affidabili nel dare i risultati attesi durante gli aggiornamenti.
+
+    Non ci si dimentichi di montare tutte le partizioni necessarie
+    (in particolare le partizioni radice e /usr) in modalità di
+    lettura e scrittura, con un comando del tipo:
+
+    # mount -o remount,rw /puntodimount
+
+    Si dovrebbe poi controllare molto attentamente che le voci sulle
+    fonti di APT (contenute in /etc/apt/sources.list) facciano
+    riferimento a «stretch» o a «stable». Non ci dovrebbero essere
+    voci di fonti che puntano a jessie.
+
+    +--------------------------------------------------+
+    |Nota                                              |
+    |                                                  |
+    |Qualche volta le righe delle fonti per un CD-ROM  |
+    |potrebbero fare riferimento a «unstable»; sebbene |
+    |ciò possa generare confusione non le si dovrebbe  |
+    |modificare.                                       |
+    +--------------------------------------------------+
+
+4.4.1. Registrazione della sessione
+
+    È fortemente raccomandato l'utilizzo del programma /usr/bin/
+    script per registrare una trascrizione della sessione di
+    aggiornamento. In tal modo, se si verificasse un problema si
+    disporrà di una registrazione di quanto accaduto e, se
+    necessario, si potranno fornire le informazioni esatte in
+    un'eventuale segnalazione di errori. Per avviare la
+    registrazione, si digiti:
+
+    # script -t 2>~/upgrade-stretchfase.time -a ~/upgrade-stretchfase.script
+
+    o un comando simile. Se fosse necessario fare la trascrizione di
+    un'altra sessione (perché, per esempio, è necessario riavviare il
+    sistema), usare valori diversi per fase in modo da indicare anche
+    la fase dell'aggiornamento che si sta registrando. Non si
+    collochi il file della registrazione in una directory temporanea
+    come /tmp o /var/tmp, in quanto i file in queste directory
+    potrebbero venir cancellati durante l'aggiornamento o durante un
+    qualunque riavvio.
+
+    Il file generato permetterà anche di rileggere le informazioni
+    scorse fuori dalla schermata. Se si usa la console di sistema,
+    basterà passare a VT2 (con Alt+F2) e, dopo aver effettuato
+    l'accesso, utilizzare il comando less -R ~root/
+    upgrade-stretch.script per visualizzare il file.
+
+    Dopo aver completato l'aggiornamento si può arrestare script,
+    digitando exit al prompt.
+
+    Se si è utilizzato il parametro -t per script, si può utilizzare
+    il programma scriptreplay per replicare l'intera sessione:
+
+    # scriptreplay ~/upgrade-stretch.time ~/upgrade-stretch.script
+
+4.4.2. Aggiornamento della lista dei pacchetti
+
+    Anzitutto deve essere recuperata la lista dei pacchetti
+    disponibili per la nuova versione. Lo si fa eseguendo:
+
+    # apt-get update
+
+4.4.3. Accertarsi di avere spazio disponibile a sufficienza per
+l'aggiornamento
+
+    Prima di aggiornare il proprio sistema ci si deve accertare di
+    avere uno spazio disponibile sufficiente sul proprio disco fisso
+    al momento di far partire l'aggiornamento completo del sistema,
+    come descritto in Sezione 4.4.5, «Aggiornamento del sistema». Per
+    prima cosa, poiché ogni pacchetto necessario per l'installazione
+    prelevato dalla rete è immagazzinato in /var/cache/apt/archives
+    (e nella sottodirectory partial/, durante lo scaricamento), ci si
+    dovrebbe assicurare di avere spazio a sufficienza nella
+    partizione del file system che contiene /var per il temporaneo
+    scaricamento dei pacchetti che saranno installati nel sistema.
+    Dopo lo scaricamento sarà probabilmente necessario avere
+    ulteriore spazio disponibile in altre partizioni del file system
+    per poter installare sia i pacchetti aggiornati (che potrebbero
+    contenere file binari più grossi o più dati), sia i nuovi
+    pacchetti che saranno introdotti con l'aggiornamento. Se il
+    sistema non ha spazio libero a sufficienza, si potrebbe finire
+    con un aggiornamento incompleto dal quale è difficile effettuare
+    un ripristino.
+
+    apt-get può mostrare informazioni dettagliate sullo spazio su
+    disco necessario per l'installazione. È possibile visualizzare
+    questa stima prima di eseguire effettivamente l'aggiornamento,
+    eseguendo:
+
+    # apt-get -o APT::Get::Trivial-Only=true dist-upgrade
+    [ ... ]
+    XXX aggiornati, XXX installati, XXX da rimuovere e XXX non aggiornati.
+    È necessario scaricare xx.xMB di archivi.
+    Dopo quest'operazione, verranno occupati AAAMB di spazio su disco.
+
+    Nota
+
+    L'esecuzione di questo comando all'inizio del processo di
+    aggiornamento potrebbe restituire un errore, per le ragioni
+    descritte nelle sezioni seguenti. In tal caso sarà necessario
+    attendere finché non sarà stato eseguito l'aggiornamento minimo
+    del sistema come descritto in Sezione 4.4.4, «Aggiornamento
+    minimo del sistema» prima di eseguire il comando per avere una
+    stima dello spazio necessario su disco.
+
+    Se lo spazio disponibile è insufficiente per l'aggiornamento, 
+    apt-get avverte con un messaggio come questo:
+
+    E: Spazio libero in /var/cache/apt/archives/ insufficiente.
+
+    In questo caso, accertarsi di liberare prima uno spazio
+    sufficiente. È possibile:
+
+      * Rimuovere i pacchetti che sono stati precedentemente scaricati
+        per l'installazione (in /var/cache/apt/archives). Pulire la cache
+        dei pacchetti eseguendo apt-get clean rimuoverà tutti i file dei
+        pacchetti scaricati in precedenza.
+
+      * Rimuovere i pacchetti dimenticati. Se si è usato aptitude o 
+        apt-get per installare manualmente dei pacchetti in jessie,
+        questi avranno tenuto traccia dei pacchetti installati
+        manualmente e saranno capaci di marcare come obsoleti quei
+        pacchetti installati solo per soddisfare delle dipendenze e che
+        non sono più necessari se un pacchetto viene rimosso. Non
+        marcheranno per la rimozione i pacchetti che sono stati
+        installati manualmente dall'utente. Per rimuovere i pacchetti
+        installati automaticamente che non sono più usati, eseguire:
+
+        # apt-get autoremove
+
+        Si può anche utilizzare deborphan, debfoster o cruft per trovare
+        i pacchetti ridondanti. Non si rimuovano alla cieca i pacchetti
+        presentati dagli strumenti, soprattutto se si usano opzioni
+        aggressive non predefinite che possono produrre dei falsi
+        positivi. È altamente raccomandato controllare manualmente i
+        pacchetti suggeriti per la rimozione (ossia il loro contenuto, la
+        loro dimensione e la descrizione) prima di rimuoverli.
+
+      * Rimuovere i pacchetti che occupano molto spazio sul disco e non
+        sono al momento necessari (possono sempre essere reinstallati
+        dopo l'aggiornamento). Se si ha popularity-contest installato, si
+        può usare popcon-largest-unused per elencare i pacchetti che non
+        si usano e che occupano più spazio. I pacchetti che occupano più
+        spazio possono essere trovati con dpigs (disponibile nel
+        pacchetto debian-goodies) oppure con wajig (eseguendo wajig
+        size). Possono anche essere trovati con aptitude. Avviare 
+        aptitude in modalità a tutto terminale, selezionare Viste → Nuovo
+        elenco unito dei pacchetti, premere l e inserire ~i, premere S e
+        inserire ~installsize, a quel punto si dovrebbe ottenere un
+        bell'elenco con cui lavorare.
+
+      * Eliminare i file di traduzioni e localizzazioni dal sistema se
+        non sono necessari. È possibile installare il pacchetto
+        localepurge e configurarlo in modo che solo poche localizzazioni
+        selezionate vengano mantenute sul sistema. Questo ridurrà lo
+        spazio su disco occupato da /usr/share/locale.
+
+      * Spostare temporaneamente su un altro sistema o rimuovere in modo
+        permanente i log di sistema che si trovano in /var/log.
+   
+      * Usare un /var/cache/apt/archives temporaneo: è possibile usare
+        una directory di cache temporanea da un altro file system
+        (periferiche di memorizzazione USB, dischi fissi temporanei, file
+        system già in uso, ecc.).
+
+        +-----------------------------------------------------+
+        |Nota                                                 |
+        |                                                     |
+        |Non si usi una partizione montata via NFS, in quanto |
+        |la connessione di rete potrebbe essere interrotta    |
+        |durante l'aggiornamento.                             |
+        +-----------------------------------------------------+
+
+        Per esempio, se si possiede un disco o una penna USB montato in /
+        media/usbkey:
+
+         1. si rimuovano i pacchetti precedentemente scaricati per
+            l'installazione:
+
+            # apt-get clean
+
+         2. si copi la directory /var/cache/apt/archives nella periferica
+            USB:
+
+            # cp -ax /var/cache/apt/archives /media/usbkey/
+
+         3. si monti la directory della cache temporanea su quella
+            attuale:
+
+            # mount --bind /media/usbkey/archives /var/cache/apt/archives
+
+         4. dopo l'aggiornamento, si ripristini la directory /var/cache/
+            apt/archives originale:
+
+            # umount /media/usbkey/archives
+
+         5. si rimuova il restante /media/usbkey/archives.
+
+        È possibile creare la cache temporanea su qualsiasi file system
+        montato sul proprio sistema.
+
+      * Effettuare un aggiornamento minimo del sistema (vedere
+        Sezione 4.4.4, «Aggiornamento minimo del sistema») oppure degli
+        aggiornamenti parziali seguiti da un aggiornamento completo.
+        Questo permette l'aggiornamento parziale del sistema e permette
+        di pulire la cache dei pacchetti prima dell'aggiornamento
+        completo.
+
+    Si noti che per rimuovere pacchetti in modo sicuro è preferibile
+    tornare a far puntare il proprio sources.list a jessie, come
+    descritto in Sezione A.2, «Controllare la propria lista delle
+    fonti».
+
+4.4.4. Aggiornamento minimo del sistema
+
+    In alcuni casi, eseguire direttamente un aggiornamento completo
+    (come descritto più avanti) potrebbe rimuovere un gran numero di
+    pacchetti che si potrebbe voler mantenere. È quindi raccomandato
+    un processo di aggiornamento in due parti: prima un aggiornamento
+    minimo che risolva questi conflitti, poi un aggiornamento
+    completo come descritto in Sezione 4.4.5, «Aggiornamento del
+    sistema».
+
+    Per farlo eseguire:
+
+    # apt-get upgrade
+
+    Nota
+
+    In alcune versioni precedenti era raccomandato l'uso di aptitude
+    per l'aggiornamento. Questo programma non è raccomandato per
+    l'aggiornamento da jessie a stretch.
+
+    Questo consentirà l'aggiornamento di quei pacchetti che possono
+    essere aggiornati senza richiedere l'installazione o la rimozione
+    di altri pacchetti.
+
+    L'aggiornamento minimo può essere utile anche quando non è
+    possibile effettuare un aggiornamento completo perché sul sistema
+    c'è poco spazio libero.
+
+    Se è installato il pacchetto apt-listchanges, esso mostrerà (con
+    la sua configurazione predefinita) all'interno di un paginatore
+    informazioni importanti sui pacchetti aggiornati. Premere q dopo
+    averle lette, per uscire dal paginatore e continuare
+    l'aggiornamento.
+
+4.4.5. Aggiornamento del sistema
+
+    Una volta completati i passaggi descritti in precedenza, si è
+    pronti per continuare con la parte principale dell'aggiornamento.
+    Si esegua:
+
+    # apt-get dist-upgrade
+
+    Nota
+
+    In alcune versioni precedenti era raccomandato l'uso di aptitude
+    per l'aggiornamento. Questo programma non è raccomandato per
+    l'aggiornamento da jessie a stretch.
+
+    Questo comando eseguirà un aggiornamento completo del sistema,
+    installando le versioni più recenti disponibili di tutti i
+    pacchetti e risolvendo i possibili cambiamenti di dipendenze fra
+    i pacchetti dei diversi rilasci. Se necessario, esso installerà
+    taluni nuovi pacchetti (normalmente nuove versioni di librerie o
+    pacchetti rinominati) e rimuoverà i pacchetti resi obsoleti in
+    conflitto.
+
+    In caso di aggiornamento da una serie di CD/DVD/BD, probabilmente
+    verrà chiesto di inserire uno specifico disco in diversi momenti
+    dell'aggiornamento. Potrebbe capitare di dover inserire più volte
+    lo stesso disco: ciò è dovuto a pacchetti correlati tra loro che
+    sono stati distribuiti su diversi dischi.
+
+    Nuove versioni di pacchetti attualmente installati che non
+    possono essere aggiornati senza modificare lo stato
+    d'installazione di un altro pacchetto saranno lasciate alla loro
+    attuale versione (contrassegnati come «held back»;, «bloccati»).
+    Questo fatto può essere risolto o utilizzando aptitude, per
+    designare tali pacchetti per l'installazione, o provando con
+    apt-get install pacchetto.
+
+4.5. Possibili problemi durante l'aggiornamento
+
+    Nelle prossime sezioni sono descritti i problemi noti che
+    potrebbero verificarsi durante l'aggiornamento a stretch.
+
+4.5.1. Dist-upgrade fallisce con l'errore «Impossibile eseguire
+immediatamente la configurazione»
+
+    In alcuni casi il passo apt-get dist-upgrade può fallire dopo aver
+    scaricato i pacchetti, con l'errore:
+
+    E: Impossibile eseguire immediatamente la configurazione su "pacchetto". Per i dettagli vedere APT::Immediate-Configure in man 5 apt.conf.
+
+    Se ciò si verifica, l'esecuzione invece di apt-get dist-upgrade
+    -o APT::Immediate-Configure=0 dovrebbe permettere
+    all'aggiornamento di continuare.
+
+    In alternativa, aggiungere entrambe le fonti jessie e stretch al
+    proprio sources.list ed eseguire apt-get update può aiutare ad
+    aggirare questo problema.
+
+4.5.2. Rimozioni attese
+
+    Il processo d'aggiornamento a stretch potrebbe richiedere la
+    rimozione di pacchetti dal sistema. L'elenco preciso dei
+    pacchetti varia in base ai pacchetti installati. Queste note di
+    rilascio forniscono un suggerimento generico riguardo le
+    rimozioni di pacchetti, ma, nel dubbio, prima di proseguire si
+    raccomanda di esaminare le rimozioni dei pacchetti che vengono
+    proposte. Per maggiori informazioni sui pacchetti obsoleti in
+    stretch vedere Sezione 4.8, «Pacchetti obsoleti».
+
+4.5.3. Conflitti e pre-dipendenze cicliche
+
+    Talvolta è necessario abilitare l'opzione APT::Force-LoopBreak
+    affinché APT possa rimuovere temporaneamente un pacchetto
+    essenziale, a causa di un circolo «è in conflitto con»/«
+    pre-dipende da». Di norma apt-get emetterà un avviso e cesserà
+    l'aggiornamento. Si può evitare questa situazione specificando
+    l'opzione -o APT::Force-LoopBreak=1 nella riga di comando di 
+    apt-get.
+
+    È possibile che la struttura di dipendenze di un sistema sia
+    talmente compromessa da richiedere un intervento manuale; ciò
+    normalmente significa l'uso di apt-get o di
+
+    # dpkg --remove nome_pacchetto
+
+    per eliminare alcuni dei pacchetti che generano il problema, o
+
+    # apt-get -f install
+    # dpkg --configure --pending
+
+    In casi estremi potrebbe essere necessario forzare la
+    re-installazione con un comando del tipo di
+
+    # dpkg --install /percorso/di/nome_pacchetto.deb
+
+4.5.4. Conflitti tra file
+
+    Non si dovrebbero verificare conflitti tra file se si aggiorna da
+    un sistema jessie «puro», ma potrebbero verificarsi se sono stati
+    installati backport non ufficiali. Un conflitto tra file causerà
+    un errore simile al seguente:
+
+    Spacchetto <pacchetto-tizio> (da <file-del-pacchetto-tizio>) ...
+    dpkg: errore processando <pacchetto-tizio> (--install):
+     tentata sovrascrittura di `<nome-di-qualche-file>',
+     che si trova anche nel pacchetto <pacchetto-caio>
+    dpkg-deb: il sottoprocesso paste è stato terminato da un segnale (Pipe rotta)
+     Sono occorsi degli errori processando:
+     <pacchetto-tizio>
+
+    Si può tentare di risolvere un conflitto fra file rimuovendo
+    forzatamente il pacchetto menzionato nell'ultima riga del
+    messaggio d'errore:
+
+    # dpkg -r --force-depends nome_pacchetto
+
+    Dopo aver risolto questo problema, si dovrebbe poter riprendere
+    l'aggiornamento ripetendo i comandi apt-get descritti in
+    precedenza.
+
+4.5.5. Modifiche alla configurazione
+
+    Durante l'aggiornamento verranno poste domande riguardanti la
+    configurazione o la riconfigurazione di parecchi pacchetti.
+    Quando viene chiesto se un qualsiasi file nella directory /etc/
+    init.d o il file /etc/manpath.config deve essere sostituito con
+    quello fornito dal manutentore del pacchetto, di solito è
+    necessario rispondere affermativamente, per garantire la coerenza
+    del sistema. Si può sempre ritornare alle versioni precedenti,
+    dal momento che queste verranno salvate con l'estensione
+    .dpkg-old.
+
+    Se non si è sicuri sul da farsi, ci si annoti il nome del
+    pacchetto o del file e si sistemino le cose in un momento
+    successivo. Le informazioni presentate sullo schermo durante
+    l'aggiornamento possono essere riesaminate dopo essere state
+    cercate nel file generato durante l'aggiornamento.
+
+4.5.6. Cambiare la sessione sulla console
+
+    Quando si usa la console locale del sistema per fare
+    l'aggiornamento, potrebbe accadere che durante l'aggiornamento la
+    console sia spostata su una vista diversa e che si perda la
+    visibilità del processo d'aggiornamento. Questo può accadere, per
+    esempio, sui sistemi desktop quando viene riavviato il display
+    manager.
+
+    Per recuperare la console su cui era in corso l'aggiornamento,
+    usare Ctrl+Alt+F1, se si è nella schermata di avvio grafico,
+    oppure usare Alt+F1 se si è in una console testuale locale, per
+    tornare al terminale virtuale 1. Al posto di F1 usare il tasto
+    funzione con lo stesso numero del terminale virtuale su cui era
+    in corso l'aggiornamento. Per scorrere i diversi terminali in
+    modalità testuale è possibile usare Alt+Freccia sinistra o Alt+
+    Freccia destra.
+
+4.6. Aggiornare il kernel e i pacchetti collegati
+
+    Questa sezione spiega come aggiornare il kernel e identifica le
+    relative potenziali problematiche. Si può o installare uno dei
+    pacchetti linux-image-* forniti da Debian, oppure compilare un
+    kernel personalizzato dai sorgenti.
+
+    Si noti che molte informazioni in questa sezione sono basate
+    sull'assunzione che si utilizzerà uno dei kernel modulari di
+    Debian, insieme con initramfs-tools e udev. Se si sceglie di
+    utilizzare un kernel personalizzato che non richiede un initrd, o
+    se si utilizza un generatore di initrd differente, alcune delle
+    informazioni potrebbero non essere attinenti al proprio caso
+    specifico.
+
+4.6.1. Installazione di un metapacchetto del kernel
+
+    Quando si effettua il dist-upgrade da jessie a stretch è
+    fortemente raccomandata, se non è ancora stata fatta,
+    l'installazione di un metapacchetto linux-image-*. Questi
+    metapacchetti richiamano automaticamente una nuova versione del
+    kernel durante gli aggiornamenti. si può verificare se ne è
+    installato uno eseguendo:
+
+    # dpkg -l "linux-image*" | grep ^ii | grep -i meta
+
+    Se non si vede alcun output, si dovrà installare manualmente un
+    nuovo pacchetto linux-image oppure installare un metapacchetto
+    linux-image. Per vedere un elenco dei metapacchetti linux-image
+    disponibili eseguire:
+
+    # apt-cache search linux-image- | grep -i meta | grep -v transition
+
+    Se non si è sicuri sul pacchetto da selezionare, si esegua uname
+    -r e si cerchi un pacchetto con un nome simile. Ad esempio, se si
+    vede «2.6.32-5-amd64» è raccomandata l'installazione di
+    linux-image-amd64. Si può anche utilizzare apt-cache per vedere
+    una lunga descrizione di ciascun pacchetto che aiuti a scegliere
+    il migliore disponibile. Ad esempio:
+
+    # apt-cache show linux-image-amd64
+
+    Si dovrebbe quindi utilizzare apt-get install per installarlo.
+    Una volta che questo nuovo kernel è installato si dovrebbe
+    riavviare alla prossima opportunità disponibile per poter godere
+    dei benefici offerti dalla nuova versione del kernel. Tuttavia
+    guardare Sezione 5.1.4, «Cose da fare dopo l'aggiornamento prima
+    di riavviare» prima di effettuare il primo riavvio dopo
+    l'aggiornamento.
+
+    Per i più avventurosi esiste un modo agevole per compilare il
+    proprio kernel personalizzato su Debian. Si installino i sorgenti
+    del kernel forniti nel pacchetto linux-source. Per compilare un
+    pacchetto binario si può usare il target deb-pkg disponibile nel
+    makefile dei sorgenti. Ulteriori informazioni possono essere
+    trovate nel Debian Linux Kernel Handbook (http://
+    kernel-handbook.alioth.debian.org/) , che può a sua volta essere
+    trovato anche nel pacchetto debian-kernel-handbook.
+
+    Se possibile, è preferibile aggiornare il pacchetto del kernel
+    separatamente dall'aggiornamento dist-upgrade principale, per
+    ridurre i rischi di trovarsi con un sistema temporaneamente non
+    avviabile. Si noti che questo dovrebbe essere fatto soltanto dopo
+    il processo di aggiornamento minimo descritto in Sezione 4.4.4,
+    «Aggiornamento minimo del sistema».
+
+4.7. Preparazione per il prossimo rilascio
+
+    Dopo l'aggiornamento ci sono molte cose che si possono fare per
+    prepararsi per il prossimo rilascio.
+
+      * Si rimuovano i pacchetti ora obsoleti o ridondanti come
+        descritto in Sezione 4.4.3, «Accertarsi di avere spazio
+        disponibile a sufficienza per l'aggiornamento» e Sezione 4.8,
+        «Pacchetti obsoleti». Si dovrebbe controllare quali file di
+        configurazione questi usano e considerare l'eliminazione
+        completa dei pacchetti per rimuovere i loro file di
+        configurazione. Vedere anche Sezione 4.7.1, «Eliminare
+        completamente i pacchetti rimossi».
+
+4.7.1. Eliminare completamente i pacchetti rimossi
+
+    È generalmente consigliabile eliminare completamenti i pacchetti
+    rimossi. Questo è particolarmente vero se i pacchetti sono stati
+    rimossi in aggiornamenti a rilasci precedenti (es.
+    nell'aggiornamento a jessie) o se sono stati forniti da
+    produttori esterni. In particolare è noto che i vecchi script
+    init.d possono causare problemi.
+
+    Attenzione
+
+    L'eliminazione completa di un pacchetto in genere elimina anche i
+    suoi file di log, perciò può essere desiderabile farne prima un
+    backup.
+
+    Il comando seguente mostra un elenco di tutti i pacchetti rimossi
+    che potrebbero avere dei file di configurazione rimasti nel
+    sistema:
+
+    # dpkg -l | awk '/^rc/ { print $2 }'
+
+    I pacchetti possono essere rimossi usando apt-get purge.
+    Ipotizzando di volerli eliminare completamente tutti in una
+    volta, si può usare il comando seguente:
+
+    # apt-get purge $(dpkg -l | awk '/^rc/ { print $2 }')
+
+    Se si usa aptitude si possono anche usare le seguenti alternative
+    ai comandi precedenti:
+
+    $ aptitude search '~c'
+    $ aptitude purge '~c'
+
+4.8. Pacchetti obsoleti
+
+    stretch introduce moltissimi nuovi pacchetti, ma nel contempo
+    ritira e manca di alcuni vecchi pacchetti che erano presenti in
+    jessie. Non viene fornito alcun percorso di aggiornamento per
+    questi pacchetti obsoleti. Nulla impedisce di continuare a usare
+    pacchetti obsoleti, se così si desidera, ma il progetto Debian
+    terminerà solitamente il supporto di sicurezza per essi un anno
+    dopo il rilascio di stretch^[5] e normalmente non fornirà altro
+    supporto oltre a quello nel frattempo. È raccomandata la loro
+    sostituzione con le alternative disponibili, se ve ne sono.
+
+    Vi sono molte ragioni per cui i pacchetti possono essere stati
+    rimossi dalla distribuzione: non sono più mantenuti a monte, non
+    vi sono più sviluppatori Debian interessati alla manutenzione dei
+    pacchetti, le funzionalità fornite sono state superate da altri
+    software o da una nuova versione, oppure non sono più considerati
+    adatti per stretch a causa di errori. In quest'ultimo caso, i
+    pacchetti potrebbero continuare a essere presenti nella
+    distribuzione «unstable».
+
+    Trovare quali pacchetti in un sistema aggiornato sono «obsoleti»
+    è facile, poiché le interfacce dei gestori di pacchetti li
+    marcheranno come tali. Se si usa aptitude, si vedrà una lista di
+    questi pacchetti nella sezione «Pacchetti obsoleti e creati
+    localmente».
+
+    Il Sistema di tracciamento dei bug (BTS) di Debian (https://
+    bugs.debian.org/) fornisce spesso informazioni aggiuntive sul
+    perché un determinato pacchetto è stato rimosso. Si dovrebbero
+    visionare sia i rapporti per il pacchetto stesso, sia i rapporti
+    archiviati dei bug per lo pseudo-pacchetto ftp.debian.org (https:
+    //bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=ftp.debian.org&
+    archive=yes) .
+
+    Per un elenco dei pacchetto obsoleti per Stretch fare riferimento
+    a Sezione 5.1.3, «Pacchetti obsoleti degni di nota».
+
+4.8.1. Pacchetti fittizi
+
+    Taluni pacchetti per jessie sono stati suddivisi in diversi
+    pacchetti in stretch, spesso al fine di migliorare la
+    manutenzione del sistema. Per facilitare il percorso di
+    aggiornamento in tali casi, stretch spesso fornisce pacchetti «
+    fittizi», che sono pacchetti vuoti che hanno lo stesso nome del
+    vecchio pacchetto in jessie con dipendenze che causano
+    l'installazione dei nuovi pacchetti. Questi pacchetti «fittizi»
+    sono considerati superflui dopo l'aggiornamento e possono essere
+    rimossi in tutta sicurezza.
+
+    La descrizione della maggior parte dei pacchetti fittizi, ma non
+    di tutti, indica il loro scopo. Purtroppo le descrizioni dei
+    pacchetti fittizi non sono uniformi, per cui si potrebbe anche
+    trovare utile lo strumento deborphan con le opzioni --guess-*
+    (per esempio --guess-dummy) per trovarli nel proprio sistema. Si
+    noti che alcuni pacchetti fittizi non sono creati per essere
+    rimossi dopo un aggiornamento ma, invece, servono per tener
+    traccia nel tempo della versione attualmente disponibile di un
+    programma.
+
+
+---------------------------------------------------------------------
+
+    ^[1] Se la priorità di debconf è impostata ad un valore molto
+    alto potrebbe bloccare i prompt di configurazione quindi i
+    servizi che si basano su risposte predefinite che non sono
+    appropriate per il proprio sistema non partiranno.
+
+    ^[2] Per esempio i servizi DNS e DHCP, in modo particolare se non
+    c'è ridondanza o failover. Nel caso del DHCP gli utenti finali
+    potrebbero essere disconnessi dalla rete se il lease time è
+    inferiore al tempo necessario per la conclusione
+    dell'aggiornamento.
+
+    ^[3] Questa funzionalità può essere disabilitata aggiungendo il
+    parametro panic=0 ai parametri di avvio del proprio sistema.
+
+    ^[4] Normalmente il sistema di gestione di pacchetti di Debian
+    non consente a un pacchetto di rimuovere o sostituire un file
+    controllato da un altro pacchetto, a meno che non sia stato
+    definito che il primo pacchetto sostituisce il secondo.
+
+    ^[5] O per tutto il tempo in cui non uscirà un altro rilascio.
+    Tipicamente solo due rilasci stabili sono supportati
+    contemporaneamente.
+
+Capitolo 5. Problemi di cui essere al corrente per stretch
+
+    A volte i cambiamenti introdotti da un nuovo rilascio comportano
+    effetti collaterali che non si possono ragionevolmente evitare o
+    che espongono errori da altre parti. In questa sezione sono
+    documentati i problemi noti. Si leggano anche le errata corrige,
+    la documentazione dei pacchetti interessati, le segnalazioni di
+    errori e altre informazioni riportate in Sezione 6.1, «Ulteriori
+    letture».
+
+5.1. Aspetti specifici dell'aggiornamento a stretch
+
+    Questa sezione tratta le voci relative all'aggiornamento da
+    jessie a stretch.
+
+5.1.1. Il montaggio ritardato di /usr non è più supportato
+
+    Nota
+
+    Questa sezione riguarda solo i sistemi che usano un kernel
+    personalizzato in cui /usr è in un punto di montaggio separato da
+    /. Se si usano i pacchetti del kernel forniti da Debian non si è
+    affetti da questo problema.
+
+    Il montaggio di /usr usando solamente strumenti che si trovano in
+    / non è più supportato. Ciò funzionava in passato solamente per
+    poche configurazioni specifiche e ora sono esplicitamente non
+    supportate.
+
+    Questo significa che per stretch tutti i sistemi in cui /usr è
+    una partizione separata devono usare un generatore di initramfs
+    che monti /usr. Tutti i generatori di initramfs in stretch lo
+    fanno.
+
+5.1.2. L'accesso FTP ai mirror ospitati da Debian verrà rimosso
+
+    I mirror ospitati da Debian smetteranno di fornire l'accesso via FTP.
+    Se si usa il protocollo ftp: nel proprio file sources.list, migrare a
+    http:. Per la migrazione, guardare l'esempio seguente:
+
+    deb http://deb.debian.org/debian          stretch         main
+    deb http://deb.debian.org/debian-security stretch/updates main
+
+    # tor variant (requires apt-transport-tor)
+    # deb  tor+http://vwakviie2ienjx6t.onion/debian          stretch            main
+    # deb  tor+http://sgvtcaew4bxjd7ln.onion/debian-security stretch/updates    main
+
+    Gli esempi soprastanti non includono non-free e contrib. Se si ha
+    necessità di avere queste componenti abilitate, ricordarsi di
+    includerle.
+
+    Per maggiori informazioni fare riferimento all'annuncio: Chiusura
+    dei servizi FTP pubblici (https://www.debian.org/News/2017/
+    20170425) .
+
+5.1.3. Pacchetti obsoleti degni di nota
+
+    Quello che segue è un elenco di pacchetti obsoleti noti e degni
+    di nota (vedere Sezione 4.8, «Pacchetti obsoleti» per una
+    descrizione).
+
+    L'elenco dei pacchetti obsoleti comprende:
+
+      * La maggior parte dei pacchetti -dbg è stata rimossa
+        dall'archivio principale. Sono stati sostituiti da pacchetti
+        -dbgsym che sono disponibili dall'archivio debian-debug.
+        Vedere Sezione 2.2.8, «Un nuovo archivio per i simboli di
+        debug».
+
+      * I gestori di password fpm2 e kedpm non sono più mantenuti
+        dagli autori originali a monte. Usare un altro gestore di
+        password, come pass, keepassx o keepass2.. Assicurarsi di
+        estrarre le proprie password da fpm2 e kedpm prima di
+        rimuovere i pacchetti.
+
+      * Il pacchetto net-tools è ora deprecato in favore di iproute2.
+        Vedere Sezione 5.3.9, «net-tools diventerà deprecato in
+        favore di iproute2» o il manuale Debian Reference (https://
+        www.debian.org/doc/manuals/debian-reference/ch05#
+        _the_low_level_network_configuration) per maggiori
+        informazioni.
+
+      * Gli strumenti di monitoraggio nagios3 sono stati rimossi da
+        stretch. Il pacchetto icinga è il sostituto più vicino. Legge
+        i propri file di configurazione da un percorso diverso
+        rispetto a nagios, ma è per il resto compatibile.
+
+5.1.4. Cose da fare dopo l'aggiornamento prima di riavviare
+
+    Quando apt-get dist-upgrade ha terminato, l'aggiornamento è «
+    formalmente» completo. Per l'aggiornamento a stretch non ci sono
+    azioni speciali necessarie prima di effettuare un riavvio.
+
+5.1.5. Gli eseguibili sono adesso compilati in modo predefinito come
+eseguibili indipendenti dalla posizione (PIE, Position Independent
+Executable).
+
+    In modo predefinito il compilatore GNU GCC 6 fornito da Debian
+    Stretch compila tutti gli eseguibili come indipendenti dalla
+    posizione. Ciò fornisce un alleggerimento da tutta una classe di
+    vulnerabilità.
+
+    Sfortunatamente il kernel Linux fornito in Debian 8 (fino a 8.7)
+    ha un problema che fa sì che alcuni programmi compilati come
+    eseguibili indipendenti dalla posizione vadano in crash
+    riportando un errore non descrittivo come segmentation fault.
+    Questo problema è stato risolto nella versione di Linux fornita
+    in 8.8 (versione 3.16.43 o successive) e nel kernel fornito in
+    Debian 9 (versione 4.9 o successive).
+
+    We recommend that you upgrade your kernel to a fixed version and
+    then reboot before starting the upgrade to stretch. If you are
+    running the kernel from Debian 8.8 or newer, you are not affected
+    by this issue.
+
+    Se si sta eseguendo una versione affetta dal problema del kernel
+    durante l'aggiornamento è fortemente raccomandato fare un riavvio
+    con kernel di stretch immediatamente dopo l'aggiornamento per
+    evitare di incontrare questo problema.
+
+5.1.5.1. Cambiamenti di comportamento di PIE per gli amministratori
+di sistema e gli sviluppatori
+
+    Nota
+
+    Questa sezione è principalmente rivolta agli sviluppatori o agli
+    amministratori di sistema. Gli utenti desktop difficilmente
+    saranno interessati dal problema descritto in questa sezione.
+
+    Quanto detto sopra porta anche ad alcuni cambiamenti che è bene
+    conoscere.
+
+      * Lo strumento file (tra gli altri) classifica tali binari come «
+        oggetti condivisi» invece che come «eseguibili». Se si hanno
+        filtri basati su file binari, potrebbe essere necessario
+        aggiornarli (es. filtri anti-spam).
+
+      * Anche le librerie statiche compilate in un eseguibile ora devono
+        essere compilate come codice indipendente dalla posizione. Il
+        seguente messaggio di errore da un linker è un sintomo di un
+        problema relativo a questo:
+
+        relocation ... against '[SYMBOL]' can not be used when making a shared object; recompile with -fPIC
+   
+        Notare che anche se il messaggio di errore riporta -fPIC è
+        sufficiente ricompilare con -fPIE (che è il valore predefinito
+        nei pacchetti GCC 6 che fanno parte di stretch).
+
+      * Storicamente gli eseguibili indipendenti dalla posizione sono
+        stati associati su certo hardware ad una perdita di prestazioni.
+        In particolare per l'architettura Debian i386 (macchine Intel a
+        32 bit). Mentre GCC 5 e GCC 6 hanno fortemente migliorato le
+        prestazioni per eseguibili indipendenti dalla posizione su Intel
+        a 32 bit (https://software.intel.com/en-us/blogs/2014/12/26/
+        new-optimizations-for-x86-in-upcoming-gcc-50-32bit-pic-mode) ,
+        questa ottimizzazione potrebbe non essere applicabile a tutte le
+        architetture. Considerare di valutare le prestazioni del proprio
+        codice se si ha come obiettivo architetture di macchine con un
+        numero molto limitato di registri.
+
+5.1.6. La maggior parte dei pacchetti di compatibilità con LSB sono
+stati rimossi
+
+    A causa di una mancanza di interessa e di testabilità, Debian ha
+    rimosso la stragrande maggioranza dei pacchetti di compatibilità
+    LSB (Linux Standard Base).
+
+    Debian continuerà a fornire poche utilità chiave LSB selezionate
+    utilizzate internamente ed esternamente, come lsb-release e le
+    funzioni init di sysvinit in lsb-base. Inoltre Debian conferma la
+    sua forte adesione alla versione 2.3 del Filesystem Hierarchy
+    Standard (FHS) con le modifiche minori descritte nel manuale
+    Debian Policy (https://www.debian.org/doc/debian-policy/
+    ch-opersys.html#s-fhs) .
+
+5.2. Limitazione nel supporto per la sicurezza
+
+    Ci sono alcuni pacchetti per i quali Debian non può garantire di
+    fornire i backport minimi per ragioni di sicurezza. Questi
+    verranno trattati nelle sottosezioni che seguono.
+
+    Notare che il pacchetto debian-security-support aiuta a tenere
+    traccia dello stato del supporto di sicurezza per i pacchetti
+    installati.
+
+5.2.1. Stato della sicurezza dei browser web
+
+    Debian 9 contiene diversi motori per browser che sono affetti da
+    varie vulnerabilità di sicurezza. L'alto tasso di vulnerabilità e
+    la parziale mancanza di supporto a lungo termine da parte degli
+    autori originali complica l'attività di supporto di questi
+    browser tramite l'applicazione delle correzioni di sicurezza alle
+    versioni precedenti. Inoltre la dipendenza reciproca delle
+    librerie rende impossibile aggiornare a una nuova versione.
+    Perciò, in stretch sono presenti browser basati sui motori
+    webkit, qtwebkit e khtml, ma non sono coperti dal supporto di
+    sicurezza. Non si dovrebbe usare questi browser con siti web non
+    fidati.
+
+    Per un browser web di uso generico si raccomanda Firefox oppure
+    Chromium.
+
+    Chromium, pur essendo costruito sul codice Webkit, è un pacchetto
+    foglia che verrà mantenuto aggiornato ricompilando i rilasci
+    correnti di Chromium per stable. Firefox e Thunderbird verranno
+    anch'essi mantenuti aggiornati ricompilando i rilasci ESR
+    correnti per stable.
+
+5.2.2. Mancanza di supporto di sicurezza per l'ecosistema di libv8 e
+Node.js
+
+    La piattaforma Node.js è costruita sulla base di libv8-3.14 che
+    ha un grande volume di problemi di sicurezza ma al momento non ci
+    sono volontari all'interno del progetto o nel Team di sicurezza
+    sufficientemente interessati e con la volontà di investire la
+    grande quantità di tempo richiesto per limitare questi problemi
+    in arrivo.
+
+    Sfortunatamente ciò significa che libv8-3.14, nodejs e
+    l'ecosistema di pacchetti node-* associati attualmente non
+    dovrebbe essere usato con contenuti non fidati, come dati non
+    ripuliti presi da Internet.
+
+    In aggiunta questi pacchetti non riceveranno alcun aggiornamento
+    di sicurezza durante la vita del rilascio stretch.
+
+5.3. Problemi relativi a specifici pacchetti
+
+    Nella maggior parte dei casi i pacchetti dovrebbero aggiornarsi
+    senza problemi da jessie a stretch. C'è un numero limitato di
+    casi dove può essere necessario un qualche intervento, prima o
+    durante l'aggiornamento; questi casi sono descritti in dettaglio
+    di seguito, pacchetto per pacchetto.
+
+5.3.1. Protocollo SSH1 e cifrari più vecchi disabilitati in OpenSSH
+in modo predefinito
+
+    Il rilascio di OpenSSH 7 ha disabilitato in modo predefinito
+    alcuni vecchi cifrari e il protocollo SSH1. Fare attenzione
+    quando si aggiornano macchine a cui si ha accesso solo via SSH.
+
+    Inoltre il valore predefinito dell'opzione di configurazione
+    "UseDNS" è stato cambiato da si a no. Ciò può far sì che gli
+    utenti che usano la funzionalità "from=" in authorized_keys per
+    limitare l'accesso ssh in base all'host rimangano bloccati fuori,
+    il che è particolarmente problematico se si aggiorna da remoto.
+
+    Fare riferimento alla documentazione di OpenSSH (http://
+    www.openssh.com/legacy.html) per maggiori informazioni.
+
+5.3.2. Modifiche potenziamente incompatibili all'indietro in APT
+
+    Questa sezione copre alcune delle modifiche incompatibili ad APT
+    che potrebbero influenzare il sistema.
+
+5.3.2.1. APT ora recupera i file con un utente non privilegiato
+(_apt)
+
+    APT ora cerca di liberarsi di tutti i privilegi di root prima di
+    recuperare i file dai mirror. APT può rilevare alcuni casi d'uso
+    comuni dove ciò porterebbe a un fallimento e ripiega sul
+    recuperare il materiale come root dando un avvertimento. Tuttavia
+    può non riuscire a rilevare alcune configurazioni particolari
+    (es. regole di firewall specifiche per UID).
+
+    Se si incontrano problemi con questa funzionalità, diventare
+    l'utente _apt e controllare che:
+
+      * abbia accesso in lettura ai file in /var/lib/apt/lists e /var/
+        cache/apt/archives;
+
+      * abbia accesso in lettura all'archiviazione della fiducia di APT
+        (/etc/apt/trusted.gpg e /etc/apt/trusted.gpg.d/);
+
+      * possa risolvere nomi DNS e scaricare file. Esempi di metodi per
+        testarlo sono:
+
+        # Dal pacchetto dnsutils (se si usa tor, controllare invece con tor-resolve).
+        $ nslookup debian.org >/dev/null || echo "Cannot resolve debian.org"
+        $ wget -q https://debian.org/ -O- > /dev/null || echo "Impossibile scaricare la pagina indice di debian.org"
+
+        Per problemi con DNS controllare che /etc/resolv.conf sia
+        leggibile.
+
+5.3.2.2. Nuovo motore di pin di APT
+
+    APT 1.1 ha introdotto un nuovo motore di pin che corrisponde ora
+    alla descrizione nella pagina di manuale.
+
+    Il vecchio motore assegnava una priorità di pin per pacchetto,
+    quello nuovo assegna le priorità di pin per versione. Sceglie poi
+    la versione con il più alto pin che non sia una retrocessione o
+    che ha un pin > 1000.
+
+    Questo cambia l'effetto di alcuni pin, specialmente quelli
+    negativi. In precedenza, fare il pin di una versione a -1 di
+    fatto evitava che il pacchetto venisse installato (il pin del
+    pacchetto era -1), ora evita solamente che venga installata la
+    versione di questo pacchetto.
+
+5.3.2.3. Nuovi requisiti per repository APT
+
+    Nota
+
+    Questa sezione è rilevante solo se si hanno (o si intendono
+    usare) repository di terze parti abilitati o se si mantiene un
+    repository APT.
+
+    Per migliorare la stabilità degli scaricamenti e garantire la
+    sicurezza dei contenuti scaricati, APT ora ha per i repository
+    APT i seguenti requisiti:
+
+      * Il file InRelease deve essere disponibile.
+
+      * Tutti i metadati devono includere almeno i codici di
+        controllo SHA256 di tutti gli elementi. Ciò include la firma
+        GPG del file InRelease.
+
+      * Le firme del file InRelease devono essere fatte con una
+        chiave di dimensione uguale o maggiore di 2048 bit.
+
+    Se ci si affida ad un repository di terze parti che non può
+    conformarsi con i requisiti suddetti, invitare i responsabili ad
+    aggiornare il proprio repository. Ulteriori informazioni sul file
+    InRelease possono essere trovate sul Debian Wiki (https://
+    wiki.debian.org/RepositoryFormat#A.22Release.22_files) .
+
+5.3.3. I desktop migreranno al driver di Xorg libinput
+
+    Nota
+
+    Questa sezione è rilevante solo se è stata toccata o si ha
+    necessità di modificare la configurazione di input predefinita di
+    Xorg.
+
+    In jessi, il driver di input predefinito per Xorg è il driver
+    evdev. In stretch, la scelta predefinita è modificata in
+    libinput. Se si ha una configurazione di Xorg che si basa sul
+    driver evdev, si deve convertirla al driver libinput o
+    riconfigurare il sistema in modo che usi il driver evdev.
+
+    Quello che segue è un esempio di configurazione per libinput per
+    abilitare la funzionalità «Emulate3Buttons».
+
+    Section "InputClass"
+            Identifier "mouse"
+            MatchIsPointer "on"
+            Driver "libinput"
+            Option "MiddleEmulation" "on"
+    EndSection
+
+    Inserirla in /etc/X11/xorg.conf.d/41-middle-emulation.conf,
+    riavviare il sistema (o riavviare il server X) e dovrebbe essere
+    abilitata.
+
+    Il driver evdev è sempre disponibile nel pacchetto
+    xserver-xorg-input-evdev.
+
+5.3.4. Upstart rimosso
+
+    A causa della mancanza di manutenzione da parte degli autori a
+    monte, il sistema init Upstart è stato rimosso da stretch. Se il
+    proprio sistema fa affidamento su questo pacchetto, tenere a
+    mente che non verrà aggiornato durante la vita di Debian 9 e che,
+    a partire da Debian 10 (buster), i compiti upstart potrebbero
+    essere rimossi dai pacchetti.
+
+    Considerare il passaggio a un sistema init supportato, come
+    systemd o OpenRC.
+
+5.3.5. Lo strumento debhelper ora genera in modo predefinito
+pacchetti dbgsym
+
+    Nota
+   
+    Questa sezione è pensata principalmente per gli sviluppatori o le
+    organizzazione che compilano i propri pacchetti Debian.
+
+    La suite di strumenti debhelper genera ora in modo predefinito
+    pacchetti dbgsym per i binari ELF. Se si sviluppano e
+    impacchettano binari, controllare che i propri strumenti
+    supportino questo pacchetti extra generati automaticamente.
+
+    Se si usa reprepro si vorrà aggiornare almeno alla versione
+    4.17.0. Per aptly sarà necessaria almeno la versione 1.0.0 che
+    sfortunatamente non è disponibile in Debian stretch.
+
+    Se i propri strumenti non sono in grado di lavorare in modo
+    pulito con essi, si può chiedere a debhelper di disabilitare
+    questa funzionalità aggiungendo «noautodbgsym» nella variabile
+    DEB_BUILD_OPTIONS del proprio servizio di compilazione. Vedere la
+    pagina di manuale di dh_strip per ulteriori informazioni (https:/
+    /manpages.debian.org/stretch/debhelper/dh_strip.1.en.html) .
+
+5.3.6. Cambiamenti relativi a OpenSSL
+
+    L'applicazione openssl si aspetta gli argomenti opzione prima
+    degli argomenti non opzione. Per esempio questo non funziona più:
+
+    openssl dsaparam 2048 -out file
+
+    mentre questo lo fa ancora:
+
+    openssl dsaparam -out file 2048
+
+    Il comando openssl enc ha cambiato il digest predefinito (usato
+    per creare la chiave dalla passphrase) da MD5 a SHA256. Il digest
+    può essere specificato con l'opzione -md nel caso in cui vecchi
+    file debbano essere decifrati con il nuovo OpenSSL (o viceversa).
+
+    I cifrari 3DES e RC4 non sono più disponibili per la
+    comunicazione TLS/SSL. I server con link a OpenSSL non possono
+    offrirli e i client non possono connettersi a server che offrono
+    solo quelli. Ciò significa che OpenSSL e Windows XP non hanno
+    alcun cifrario comune.
+
+    Il pacchetto libssl-dev fornisce file header per compilare con
+    OpenSSL 1.1.0. L'API è cambiata molto ed è possibile che il
+    software non compili più. È disponibile una panoramica dei
+    cambiamenti (https://wiki.openssl.org/index.php/1.1_API_Changes)
+    . Se non si può aggiornare il proprio software c'è anche
+    libssl1.0-dev che fornisce header per OpenSSL 1.0.2.
+
+5.3.7. Modifiche a Perl che possono rendere non funzionante software
+di terze parti
+
+    Nota
+   
+    Questa sezione riguarda il codice mantenuto al di fuori di
+    Debian: script e moduli Perl locali, di terze parti od obsoleti.
+
+      * Alcuni moduli sono stati rimossi dal nucleo centrale di Perl
+        e sono ora forniti in pacchetti separati. Esempi degni di
+        nota sono CGI, disponibile nel pacchetto libcgi-pm-perl, e
+        Module::Build, disponibile nel pacchetto libmodule-build-perl
+        .
+
+      * La directory di lavoro corrente (.) è stata rimossa
+        dall'elenco predefinito di directory per gli include: @INC.
+        Questo può avere un effetto sull'uso di require(), do(), ecc.
+        in cui gli argomenti sono file nella directory corrente.
+
+        Tutti i programmi e i moduli Perl forniti in Debian
+        dovrebbero essere corretti per affrontare ogni
+        incompatibilità causata da quanto detto; segnalare bug se ciò
+        non è vero. Dato che la modifica è stata fatta in Perl
+        5.26.0, anche il software di terze parti dovrebbe iniziare ad
+        essere corretto. Informazioni per gli sviluppatori su come
+        correggere questo problema sono fornite nelle note di
+        rilascio di Perl 5.26 (https://metacpan.org/changes/release/
+        XSAWYERX/perl-5.26.0#Removal-of-the-current-directory-
+        (%22.%22)-from-@INC) (vedere la sezione SECURITY).
+
+        Se è necessario si può temporaneamente ripristinare . in @INC
+        globalmente commentando la riga in /etc/perl/
+        sitecustomize.pl, ma lo si dovrebbe fare solamente se si
+        comprendono i potenziali rischi. Questa soluzione temporanea
+        verrà rimossa in Debian 10. Si può anche impostare la
+        variabile d'ambiente PERL_USE_UNSAFE_INC in un contesto
+        specifico, ottenendo lo stesso effetto.
+
+      * L'elenco completo delle modifiche in Perl a partire dalla
+        versione in Debian 8 è disponibile in perl522delta (https://
+        metacpan.org/pod/release/RJBS/perl-5.22.0/pod/perldelta.pod)
+        e perl524delta (https://metacpan.org/pod/release/RJBS/
+        perl-5.24.0/pod/perldelta.pod) .
+
+5.3.8. Incompatibilità PostgreSQL PL/Perl
+
+    Il pacchetto del linguaggio procedurale PostgreSQL PL/Perl in
+    jessie è incompatibile con la versione di Perl in stretch. Il
+    pacchetto postgresql-plperl-9.4 verrà rimosso durante
+    l'aggiornamento, rendendo non funzionanti le procedure Perl lato
+    server. L'aggiornamento a PostgreSQL 9.6 non dovrebbe essere
+    disturbato, le procedure funzioneranno nel nuovo cluster
+    PostgreSQL se è installato il pacchetto postgresql-plperl-9.6. Se
+    non si è sicuri, fare un backup dei propri cluster PostgreSQL 9.4
+    prima dell'aggiornamento a stretch.
+
+5.3.9. net-tools diventerà deprecato in favore di iproute2
+
+    Il pacchetto net-tools in modo predefinito non fa più parte delle
+    nuove installazioni data che la sua priorità è stata abbassata da
+    importante ad opzionale. È consigliato invece agli utenti di
+    usare il moderno insieme di strumenti iproute2 (che fa parte
+    delle nuove installazioni già da diversi rilasci). Se si
+    preferisce continuare ad usare i programmi net-tools, li si può
+    semplicemente installare con
+
+    apt install net-tools
+
+    Avvertimento
+
+    Tenere a mente che net-tools può essere disinstallato durante
+    l'aggiornamento se era stato installato solamente per soddisfare
+    una dipendenza. Se si fa affidamento su net-tools ricordarsi di
+    contrassegnarlo come pacchetto installato manualmente prima
+    dell'aggiornamento usando:
+
+    apt-mark manual net-tools
+
+    Quello che segue è un riassunto dei comandi net-tools insieme ai
+    loro equivalenti per iproute2:
+
+    +---------------------------------------------------------------+
+    |vecchi comandi|          comandi iproute2 sostitutivi          |
+    |  net-tools   |                                                |
+    |--------------+------------------------------------------------|
+    |arp           |ip n (ip neighbor)                              |
+    |--------------+------------------------------------------------|
+    |ifconfig      |ip a (ip addr), ip link, ip -s (ip -stats)      |
+    |--------------+------------------------------------------------|
+    |iptunnel      |ip tunnel                                       |
+    |--------------+------------------------------------------------|
+    |nameif        |ip link                                         |
+    |--------------+------------------------------------------------|
+    |netstat       |ss, ip route (per netstat -r), ip -s link (per  |
+    |              |netstat -i), ip maddr (per netstat -g)          |
+    |--------------+------------------------------------------------|
+    |route         |ip r (ip route)                                 |
+    +---------------------------------------------------------------+
+
+5.3.10. L'opzione di mount _netdev è raccomandata quando si usano
+dispositivi AoE (ATA over Ethernet)
+
+    Nota
+
+    Questa sezione si applica solo ai sistemi che hanno dispositivi
+    AoE (ATA over Ethernet). Se il sistema non monta alcuna
+    condivisione di rete si può saltare questa sezione senza
+    problemi.
+
+    A causa di una ripulitura della gestione della deconfigurazione
+    della rete, i dispositivi AoE in uso non vengono più gestiti come
+    atteso durante lo spegnimento e ciò può risultare in blocchi o
+    perdite di dati. Per mitigare questa situazione è suggerito
+    montare questi dispositivi usando l'opzione di mount _netdev.
+    Tale opzione è disponibile anche quando si usa lo swap via AoE.
+
+5.3.11. Avvertimenti non problematici «Unescaped ... in regex is
+deprecated, ...» durante l'aggiornamento
+
+    Durante l'aggiornamento potrebbero essere visualizzati avvertimenti
+    come:
+   
+    Unescaped left brace in regex is deprecated, passed through in regex; marked by <-- HERE in m/^(.*?)(\\)?\${ <-- HERE ([^{}]+)}(.*)$/ at /usr/share/perl5/Debconf/Question.pm line 72.
+    Unescaped left brace in regex is deprecated, passed through in regex; marked by <-- HERE in m/\${ <-- HERE ([^}]+)}/ at /usr/share/perl5/Debconf/Config.pm line 30.
+
+    Sono innocui e si verificano se perl-base viene aggiornato prima
+    del pacchetto debconf.
+
+5.3.12. Migrazione dell'archivio della politica SELinux
+
+    Nota
+   
+    Questa sezione si applica solo ai sistemi che usano SELinux, che
+    non è abilitato in modo predefinito.
+
+    In stretch, l'archivio delle politiche SELinux è stato spostato
+    da /etc/selinux/<nome_politica> a /var/lib/selinux/
+    <nome_politica>. Inoltre è cambiato il formato usato all'interno
+    dell'archivio.
+
+    Le politiche fornite da Debian (ad esempio dal pacchetto
+    selinux-policy-default) verranno migrate automaticamente.
+    Tuttavia la migrazione delle politiche specifiche del sistema
+    deve essere fatta manualmente.
+
+    Il pacchetto semanage-utils fornisce lo script /usr/lib/selinux/
+    semanage_migrate_store per fare questa transizione.
+
+5.3.13. iSCSI Enterprise Target non più supportato
+
+    IET (iSCSI Enterprise Target), pacchettizzato nel pacchetto
+    iscsitarget nei precedenti rilasci, non è più in Debian dato che
+    non funziona con le versioni recenti del kernel e il progetto non
+    ha visto ultimamente alcuna attività di sviluppo.
+
+    Gli utenti di IET sono incoraggiati a passare allo stack LIO che
+    è completamente supportato in Debian Stretch. Il pacchetto
+    targetcli-fb fornisce l'utilità di configurazione per il tarsget
+    iSCSI LIO.
+
+    Dato che lo stack LIO è stato sviluppato indipendentemente da IET
+    la configurazione deve essere migrata manualmente.
+
+Capitolo 6. Maggiori informazioni su Debian
+
+6.1. Ulteriori letture
+
+    Oltre alle presenti note di rilascio e alla guida
+    all'installazione, ulteriore documentazione su Debian è
+    disponibile presso il Progetto di Documentazione di Debian (DDP -
+    Debian Documentation Project), il cui scopo è creare
+    documentazione di alta qualità per gli utenti e gli sviluppatori
+    di Debian, quale la Debian Reference, la guida per i nuovi
+    manutentori Debian, le FAQ Debian e molti altri documenti. Per
+    dettagli completi sulle risorse disponibili si consulti il sito
+    della documentazione Debian (https://www.debian.org/doc/) e il
+    Wiki Debian (https://wiki.debian.org/) .
+
+    La documentazione per i singoli pacchetti viene installata in /
+    usr/share/doc/pacchetto. Questa potrebbe includere anche
+    informazioni sul copyright, dettagli specifici inerenti Debian e
+    ogni altra documentazione dell'autore.
+
+6.2. Ottenere aiuto
+
+    Ci sono molte fonti disponibili per l'aiuto, le informazioni e il
+    supporto agli utenti di Debian, ma queste dovrebbero essere prese
+    in considerazione solo dopo aver cercato il problema nella
+    documentazione disponibile. Questa sezione fornisce una breve
+    panoramica delle risorse che potrebbero essere d'aiuto ai nuovi
+    utenti di Debian.
+
+6.2.1. Liste di messaggi
+
+    Le liste di messaggi di maggior interesse per gli utenti di
+    Debian sono debian-user (in inglese), debian-italian (in
+    italiano) e le liste debian-user-lingua (per le altre lingue).
+    Per informazioni su queste liste e dettagli sulle modalità di
+    sottoscrizione si veda https://lists.debian.org/ (https://
+    lists.debian.org/) . Si raccomanda di cercare la risposta alla
+    propria domanda negli archivi prima di inviarla e di osservare la
+    «netiquette» standard delle liste.
+
+6.2.2. Internet Relay Chat
+
+    Debian ha un canale IRC dedicato al supporto e all'aiuto agli
+    utenti Debian, che si trova sulla rete IRC OFTC. Per accedere a
+    tale canale si indirizzi il proprio client IRC preferito su
+    irc.debian.org e si acceda a #debian. Il canale italiano di
+    supporto è sulla rete IRC OFTC, #debian-it.
+
+    Si prega di seguire le linee guida del canale, nel pieno rispetto
+    degli altri utenti. Queste sono disponibili nel wiki di Debian
+    (https://wiki.debian.org/DebianIRC) .
+
+    Per maggiori informazioni su OFTC si visiti il sito web (http://
+    www.oftc.net/) .
+
+6.3. Segnalare i bug
+
+    Viene fatto ogni sforzo per rendere Debian un sistema operativo
+    di alta qualità, ma questo non significa che i pacchetti forniti
+    siano totalmente esenti da problemi. Coerentemente con la
+    filosofia dello «sviluppo aperto» di Debian e come servizio per
+    gli utenti forniamo sul sistema di tracciamento dei bug (BTS, Bug
+    Tracking System) tutte le informazioni disponibili sugli errori
+    scoperti. Il BTS è consultabile all'indirizzo https://
+    bugs.debian.org/ (https://bugs.debian.org/) .
+
+    Se si trova un errore nella distribuzione o in un software
+    pacchettizzato che ne fa parte si è pregati di segnalarlo, in
+    modo che possa essere opportunamente risolto per i rilasci
+    futuri. Per la segnalazione degli errori è richiesto un indirizzo
+    di posta elettronica valido, per poter tenere traccia degli
+    errori e in modo che gli sviluppatori possano mettersi in
+    contatto con gli autori delle segnalazioni qualora fossero
+    necessarie maggiori informazioni.
+
+    Si può segnalare un errore utilizzando il programma reportbug o
+    manualmente utilizzando la posta elettronica. Si possono ottenere
+    maggiori informazioni sul sistema di tracciamento dei bug e su
+    come utilizzarlo leggendo la documentazione di riferimento
+    (disponibile in /usr/share/doc/debian, se si ha installato
+    doc-debian) o in linea presso il Bug Tracking System (https://
+    bugs.debian.org/) .
+
+6.4. Contribuire a Debian
+
+    Non è necessario essere degli esperti per contribuire a Debian.
+    Assistendo gli utenti con i problemi che espongono sulle varie
+    liste di supporto per gli utenti (https://lists.debian.org/) si
+    fornisce un contributo alla comunità. Identificare (e anche
+    risolvere) problemi relativi allo sviluppo della distribuzione
+    tramite la partecipazione alle liste per lo sviluppo (https://
+    lists.debian.org/) è un'altra attività estremamente utile. Per
+    mantenere l'alta qualità della distribuzione Debian si possono
+    segnalare errori (https://bugs.debian.org/) , in modo da aiutare
+    gli sviluppatori a trovarli e a correggerli. Lo strumento
+    how-can-i-help aiuta a trovare dei bug segnalati adatti su cui
+    lavorare. Se si è portati per la scrittura si potrebbe voler
+    fornire più attivamente un contributo aiutando a scrivere la
+    documentazione (https://www.debian.org/doc/cvs) o a tradurre
+    (https://www.debian.org/international/) nella propria lingua la
+    documentazione esistente.
+
+    Se si ha più tempo da dedicare, si può provvedere alla gestione
+    di una parte della raccolta di software libero contenuta in
+    Debian. È particolarmente utile che delle persone adottino o
+    mantengano elementi che altre persone hanno richiesto di
+    includere in Debian. I dettagli a tal proposito si trovano nel
+    database Work Needing and Prospective Packages (https://
+    www.debian.org/devel/wnpp/) . Se si ha un interesse verso qualche
+    area specifica, si potrebbe trovare piacevole fornire un
+    contributo a qualcuno fra i sottoprogetti di Debian (https://
+    www.debian.org/devel/#projects) , che comprendono port verso
+    architetture particolari e, fra i molti altri, Debian Pure Blends
+    (https://wiki.debian.org/DebianPureBlends) per specifici gruppi
+    di utenti.
+
+    In ogni caso, se si sta lavorando all'interno della comunità del
+    software libero in un qualunque ambito come utente,
+    programmatore, scrittore o traduttore, si sta già dando un
+    contributo alla causa del software libero. Contribuire è
+    gratificante e divertente e, oltre a permettere di incontrare
+    nuove persone, dà quella certa sensazione interiore di benessere.
+
+Appendice A. Gestire il proprio sistema jessie prima dell'avanzamento
+
+    Questa appendice contiene informazioni su come accertarsi di
+    poter aggiornare o installare i pacchetti di jessie prima di
+    aggiornare a stretch. Questo dovrebbe essere necessario solo in
+    casi particolari.
+
+A.1. Aggiornare il proprio sistema jessie
+
+    In linea di principio non vi è alcuna differenza rispetto a
+    qualsiasi altro aggiornamento effettuato in precedenza per
+    jessie. L'unica differenza è che dapprima sarà necessario
+    accertarsi che il proprio elenco dei pacchetti contenga ancora i
+    riferimenti a jessie come illustrato in Sezione A.2, «Controllare
+    la propria lista delle fonti».
+
+    Se si aggiorna il proprio sistema utilizzando un mirror Debian,
+    esso sarà aggiornato automaticamente all'ultimo point release
+    (rilascio minore) di jessie.
+
+A.2. Controllare la propria lista delle fonti
+
+    Se qualsiasi riga nel proprio file /etc/apt/sources.list fa
+    riferimento a «stable», in effetti sta già puntando a stretch.
+    Ciò potrebbe non essere quello che si vuole se non si è ancora
+    pronti per l'avanzamento. Se si è già eseguito apt-get update, si
+    può ancora tornare indietro senza problemi seguendo la procedura
+    illustrata in seguito.
+
+    Se sono già stati installati pacchetti anche da stretch,
+    probabilmente non ha più molto senso installare pacchetti da
+    jessie. In questo caso si dovrà decidere se si desidera
+    continuare o meno. È possibile il «downgrade» dei pacchetti, ma
+    non è un argomento trattato qui.
+
+    Si apra il file /etc/apt/sources.list con il proprio editor
+    preferito (come utente root) e si esaminino tutte le righe che
+    cominciano con deb http:, deb https:, deb tor+http:, deb
+    tor+https: o deb ftp:^[6], cercando un riferimento a «stable». Se
+    ve n'è qualcuno, si cambi stable in jessie.
+
+    Nota
+
+    Le righe in sources.list che iniziano con «deb ftp:» e che
+    puntano a indirizzi debian.org devono essere modificate in «deb
+    http:». Vedere Sezione 5.1.2, «L'accesso FTP ai mirror ospitati
+    da Debian verrà rimosso».
+
+    Se vi sono righe che cominciano con deb file:, si deve
+    controllare da sé se gli indirizzi cui si riferiscono contengono
+    un archivio di jessie o di stretch.
+
+    Importante
+
+    Non si modifichi alcuna riga che inizi con deb cdrom:, in quanto
+    in tal caso si invaliderebbe la riga e si dovrebbe eseguire
+    nuovamente apt-cdrom. Non ci si allarmi se una fonte cdrom: fa
+    riferimento a «unstable»: sebbene sia motivo di confusione,
+    questo è normale.
+
+    Se si sono fatte delle modifiche, si salvi il file e si esegua
+
+    # apt-get update
+
+    per aggiornare la lista dei pacchetti.
+
+A.3. Rimuovere file di configurazione obsoleti
+
+    Prima di aggiornare il proprio sistema a stretch, è raccomandata
+    la rimozione dei vecchi file di configurazione (come i file
+    *.dpkg-{new,old} in /etc) dal sistema.
+
+A.4. Passare dai locale obsoleti a UTF-8
+
+    L'uso di una localizzazione non UTF-8 obsoleta da lungo tempo non
+    è più supportato dai desktop e dagli altri progetti software più
+    noti. Tali localizzazioni dovrebbero essere aggiornate usando 
+    dpkg-reconfigure locales e selezionando un valore predefinito
+    UTF-8. Ci si dovrebbe anche assicurare che gli utenti non
+    scavalchino il valore predefinito per usare una localizzazione
+    obsoleta nel proprio ambiente.
+
+
+---------------------------------------------------------------------
+
+    ^[6] Debian rimuoverà l'accesso FTP a tutti i suoi mirror
+    ufficiali il giorno 2017-11-01 (https://lists.debian.org/
+    debian-announce/2017/msg00001.html) . Se il proprio file
+    sources.list contiene un host debian.org considerare il passaggio
+    a deb.debian.org (https://deb.debian.org) . Questo problema si
+    applica solo ai mirror ospitati da Debian stessa. Se si usa un
+    mirror secondario o un repository di terze parti allora questi
+    potrebbero supportare ancora l'accesso FTP dopo tale data. In
+    caso di dubbio, consultare gli amministratori di tali mirror.
+
+Appendice B. Contributori delle note di rilascio
+
+    Molte persone hanno aiutato per le note di rilascio, inclusi, ma
+    non solo,
+
+    Adam Di Carlo, Andreas Barth, Andrei Popescu, Anne Bezemer, Bob 
+    Hilliard, Charles Plessy, Christian Perrier, Daniel Baumann, 
+    David Prévot, Eddy Petrișor, Emmanuel Kasper, Esko Arajärvi, 
+    Frans Pop, Giovanni Rapagnani, Gordon Farquharson, Javier 
+    Fernández-Sanguino Peña, Jens Seidel, Jonas Meurer, Jonathan 
+    Nieder, Joost van Baal-Ilić, Josip Rodin, Julien Cristau, Justin
+    B Rye, LaMont Jones, Luk Claes, Martin Michlmayr, Michael Biebl, 
+    Moritz Mühlenhoff, Niels Thykier, Noah Meyerhans, Noritada 
+    Kobayashi, Osamu Aoki, Peter Green, Rob Bradford, Samuel Thibault
+    , Simon Bienlein, Simon Paillard, Stefan Fritsch, Steve Langasek,
+    Steve McIntyre, Tobias Scherer, Vincent McIntyre e W. Martin 
+    Borgert.
+
+    Questo documento è stato tradotto in molte lingue. Molte grazie
+    ai traduttori.
+
+Indice analitico
+
+B
+
+BIND, Cosa c'è di nuovo nella distribuzione?
+Blu-ray, CD, DVD e BD
+
+C
+
+Calligra, Cosa c'è di nuovo nella distribuzione?
+
+D
+
+DocBook XML, Sorgenti di questo documento
+dual layer Blu-ray, CD, DVD e BD
+DVD, CD, DVD e BD
+
+E
+
+Evolution, Cosa c'è di nuovo nella distribuzione?
+Exim, Cosa c'è di nuovo nella distribuzione?
+
+G
+
+GCC, Cosa c'è di nuovo nella distribuzione?
+GNOME, Cosa c'è di nuovo nella distribuzione?
+GnuPG, Cosa c'è di nuovo nella distribuzione?
+
+I
+
+Inkscape, Cosa c'è di nuovo nella distribuzione?
+
+K
+
+KDE, Cosa c'è di nuovo nella distribuzione?
+
+L
+
+LibreOffice, Cosa c'è di nuovo nella distribuzione?
+LXDE, Cosa c'è di nuovo nella distribuzione?
+LXQt, Cosa c'è di nuovo nella distribuzione?
+
+M
+
+MariaDB, Cosa c'è di nuovo nella distribuzione?
+MATE, Cosa c'è di nuovo nella distribuzione?
+
+N
+
+Nginx, Cosa c'è di nuovo nella distribuzione?
+
+O
+
+OpenJDK, Cosa c'è di nuovo nella distribuzione?
+OpenSSH, Cosa c'è di nuovo nella distribuzione?
+
+P
+
+packages
+
+    apt, Fornire resoconti di aggiornamento, Migliorie ad APT e alla
+        struttura degli archivi, Preparazione delle fonti per APT, 
+        Aggiunta di fonti internet per APT, Aggiunta di fonti per APT
+        da mirror locale
+    apt-listchanges, Aggiornamento minimo del sistema
+    aptitude, Migliorie ad APT e alla struttura degli archivi, 
+        Accertarsi di avere spazio disponibile a sufficienza per
+        l'aggiornamento, Eliminare completamente i pacchetti rimossi
+    aptly, Lo strumento debhelper ora genera in modo predefinito
+        pacchetti dbgsym
+    dblatex, Sorgenti di questo documento
+    debconf, Avvertimenti non problematici «Unescaped ... in regex is
+        deprecated, ...» durante l'aggiornamento
+    debian-goodies, Accertarsi di avere spazio disponibile a
+        sufficienza per l'aggiornamento
+    debian-kernel-handbook, Installazione di un metapacchetto del
+        kernel
+    debian-security-support, Limitazione nel supporto per la
+        sicurezza
+    default-mysql-*, MariaDB sostituisce MySQL
+    default-mysql-client, MariaDB sostituisce MySQL
+    default-mysql-server, MariaDB sostituisce MySQL
+    doc-debian, Segnalare i bug
+    docbook-xsl, Sorgenti di questo documento
+    dpkg, Fornire resoconti di aggiornamento
+    fpm2, Pacchetti obsoleti degni di nota
+    gdm3, Il server Xorg non richiede più di essere root
+    gnupg, Passaggio a GnuPG «moderno»
+    gnupg1, Passaggio a GnuPG «moderno»
+    how-can-i-help, Contribuire a Debian
+    icinga, Pacchetti obsoleti degni di nota
+    initramfs-tools, Shell di debug durante l'avvio con initrd, 
+        Aggiornare il kernel e i pacchetti collegati
+    iproute2, Pacchetti obsoleti degni di nota, net-tools diventerà
+        deprecato in favore di iproute2
+    iscsitarget, iSCSI Enterprise Target non più supportato
+    kedpm, Pacchetti obsoleti degni di nota
+    keepass2, Pacchetti obsoleti degni di nota
+    keepassx, Pacchetti obsoleti degni di nota
+    libcgi-pm-perl, Modifiche a Perl che possono rendere non
+        funzionante software di terze parti
+    libmodule-build-perl, Modifiche a Perl che possono rendere non
+        funzionante software di terze parti
+    libpam-systemd, Il server Xorg non richiede più di essere root
+    libssl-dev, Cambiamenti relativi a OpenSSL
+    libssl1.0-dev, Cambiamenti relativi a OpenSSL
+    libv8-3.14, Mancanza di supporto di sicurezza per l'ecosistema di
+        libv8 e Node.js
+    linux-image-*, Aggiornare il kernel e i pacchetti collegati
+    linux-image-amd64, Installazione di un metapacchetto del kernel
+    linux-source, Installazione di un metapacchetto del kernel
+    localepurge, Accertarsi di avere spazio disponibile a sufficienza
+        per l'aggiornamento
+    lsb-base, La maggior parte dei pacchetti di compatibilità con LSB
+        sono stati rimossi
+    lsb-release, La maggior parte dei pacchetti di compatibilità con
+        LSB sono stati rimossi
+    mariadb-client--10.1, MariaDB sostituisce MySQL
+    mariadb-server-10.1, MariaDB sostituisce MySQL
+    mysql-defaults, MariaDB sostituisce MySQL
+    mysql-server-5.5, MariaDB sostituisce MySQL
+    mysql-server-5.6, MariaDB sostituisce MySQL
+    nagios3, Pacchetti obsoleti degni di nota
+    net-tools, Pacchetti obsoleti degni di nota, net-tools diventerà
+        deprecato in favore di iproute2
+    nodejs, Mancanza di supporto di sicurezza per l'ecosistema di
+        libv8 e Node.js
+    pacchetto-dbg, Un nuovo archivio per i simboli di debug
+    pacchetto-dbgsym, Un nuovo archivio per i simboli di debug
+    pass, Pacchetti obsoleti degni di nota
+    perl-base, Avvertimenti non problematici «Unescaped ... in regex
+        is deprecated, ...» durante l'aggiornamento
+    popularity-contest, Accertarsi di avere spazio disponibile a
+        sufficienza per l'aggiornamento
+    postgresql-plperl-9.4, Incompatibilità PostgreSQL PL/Perl
+    postgresql-plperl-9.6, Incompatibilità PostgreSQL PL/Perl
+    release-notes, Segnalare errori in questo documento
+    reprepro, Lo strumento debhelper ora genera in modo predefinito
+        pacchetti dbgsym
+    selinux-policy-default, Migrazione dell'archivio della politica
+        SELinux
+    semanage-utils, Migrazione dell'archivio della politica SELinux
+    targetcli-fb, iSCSI Enterprise Target non più supportato
+    tinc, Preparazione di un ambiente sicuro per l'aggiornamento
+    udev, Aggiornare il kernel e i pacchetti collegati
+    upgrade-reports, Fornire resoconti di aggiornamento
+    virtual-mysql-*, MariaDB sostituisce MySQL
+    xmlroff, Sorgenti di questo documento
+    xserver-xorg-input-evdev, I desktop migreranno al driver di Xorg
+        libinput
+    xsltproc, Sorgenti di questo documento
+
+Perl, Cosa c'è di nuovo nella distribuzione?
+PHP, Cosa c'è di nuovo nella distribuzione?
+Postfix, Cosa c'è di nuovo nella distribuzione?
+PostgreSQL, Cosa c'è di nuovo nella distribuzione?
+
+X
+
+Xfce, Cosa c'è di nuovo nella distribuzione?
+
+Glossario
+
+ACPI
+
+    Advanced Configuration and Power Interface
+
+ALSA
+
+    Advanced Linux Sound Architecture
+
+BD
+
+    Blu-ray Disc
+
+CD
+
+    Compact Disc
+
+CD-ROM
+
+    Compact Disc Read Only Memory
+
+DHCP
+
+    Dynamic Host Configuration Protocol
+
+DLBD
+
+    Dual Layer Blu-ray Disc
+
+DNS
+
+    Domain Name System
+
+DVD
+
+    Digital Versatile Disc
+
+GIMP
+
+    GNU Image Manipulation Program
+
+GNU
+
+    GNU's Not Unix
+
+GPG
+
+    GNU Privacy Guard
+
+LDAP
+
+    Lightweight Directory Access Protocol
+
+LSB
+
+    Linux Standard Base
+
+LVM
+
+    Logical Volume Manager
+
+MTA
+
+    Mail Transport Agent
+
+NBD
+
+    Network Block Device
+
+NFS
+
+    Network File System
+
+NIC
+
+    Network Interface Card
+
+NIS
+
+    Network Information Service
+
+PHP
+
+    PHP: Hypertext Preprocessor
+
+RAID
+
+    Redundant Array of Independent Disks
+
+SATA
+
+    Serial Advanced Technology Attachment
+
+SSL
+
+    Secure Sockets Layer
+
+TLS
+
+    Transport Layer Security
+
+UEFI
+
+    Unified Extensible Firmware Interface
+
+USB
+
+    Universal Serial Bus
+
+UUID
+
+    Universally Unique Identifier
+
+WPA
+
+    Wi-Fi Protected Access
+
