@@ -57,7 +57,7 @@ class MosesTokenizer(object):
     COMMA_SEPARATE_2 = u'[,]([^{}])'.format(IsN), r' , \1'
 
     # separate "," after a number if it's the end of a sentence
-    COMMA_SEPARATE_3 = u'([{}])[,]'.format(IsN), r'\1 , '
+    COMMA_SEPARATE_3 = u'([{}])[,]$'.format(IsN), r'\1 , '
 
     # Attempt to get correct directional quotes.
     DIRECTIONAL_QUOTE_1 = r'^``', r'`` '
@@ -335,8 +335,8 @@ class MosesTokenizer(object):
                                 for match in re.finditer(protected_pattern, text, re.IGNORECASE)]
             # Apply the protected_patterns.
             for i, token in enumerate(protected_tokens):
-                substituition = 'THISISPROTECTED' + str(i).zfill(3)
-                text = text.replace(token, substituition)
+                substitution = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(token, substitution)
 
         # Strips heading and trailing spaces.
         text = text.strip()
@@ -370,14 +370,14 @@ class MosesTokenizer(object):
         regexp, substitution = self.DEDUPLICATE_SPACE
         text = re.sub(regexp, substitution, text).strip()
         # Split trailing ".'".
-        regexp, substituition = self.TRAILING_DOT_APOSTROPHE
-        text = re.sub(regexp, substituition, text)
+        regexp, substitution = self.TRAILING_DOT_APOSTROPHE
+        text = re.sub(regexp, substitution, text)
 
         # Restore the protected tokens.
         if protected_patterns:
             for i, token in enumerate(protected_tokens):
-                substituition = 'THISISPROTECTED' + str(i).zfill(3)
-                text = text.replace(substituition, token)
+                substitution = 'THISISPROTECTED' + str(i).zfill(3)
+                text = text.replace(substitution, token)
 
         # Restore multidots.
         text = self.restore_multidots(text)

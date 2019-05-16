@@ -60,7 +60,7 @@ class TestMosesTokenizer(unittest.TestCase):
         with open(test_file, encoding='utf-8') as u, open(path_gold, encoding='utf-8') as g:
             for text, gold in zip(u, g):
                 tokenized = tokenizer.tokenize(text, return_str=True)
-                self.assertEqual(tokenized, gold.rstrip())
+                self.assertEqual(tokenized.rstrip(), gold.rstrip())
         # Delete output of original Perl script
         # os.remove(path_gold)
 
