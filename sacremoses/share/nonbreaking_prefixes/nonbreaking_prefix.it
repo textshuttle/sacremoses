@@ -34,8 +34,8 @@ Z
 Adj
 Adm
 Adv
-Amn 
-Arch 
+Amn
+Arch
 Asst
 Avv
 Bart
@@ -122,9 +122,9 @@ Surg
 V.P
 
 # other
-a.c 
+a.c
 acc
-all 
+all
 banc
 c.a
 c.c.p
@@ -136,7 +136,7 @@ corr
 dott
 e.p.c
 ecc
-es 
+es
 fatt
 gg
 int
@@ -173,7 +173,7 @@ e.g
 # add NUMERIC_ONLY after the word for this function
 #This case is mostly for the english "No." which can either be a sentence of its own, or
 #if followed by a number, a non-breaking prefix
-No #NUMERIC_ONLY# 
+No #NUMERIC_ONLY#
 Nos
 Art #NUMERIC_ONLY#
 Nr
