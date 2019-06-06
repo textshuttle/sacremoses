@@ -55,6 +55,7 @@ class MosesTokenizer(object):
     # will also space digit,letter or letter,digit forms (redundant with next section)
     COMMA_SEPARATE_1 = u'([^{}])[,]'.format(IsN), r'\1 , '
     COMMA_SEPARATE_2 = u'[,]([^{}])'.format(IsN), r' , \1'
+    COMMA_SEPARATE_3 = u'([{}])[,]$'.format(IsN), r'\1 , '
 
     # separate "," after a number if it's the end of a sentence
     COMMA_SEPARATE_3 = u'([{}])[,]$'.format(IsN), r'\1 , '
