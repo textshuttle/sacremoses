@@ -58,13 +58,13 @@ class MosesPunctuationNormalizer:
         substitute('—', ' - '),
         substitute_regex(r' +', r' '),
         substitute('´', "'"),
-        substitute_regex(r'([a-z])‘([a-z])', r"\g<1>'\g<2>", ignore_case=True),
-        substitute_regex(r'([a-z])’([a-z])', r"\g<1>'\g<2>", ignore_case=True),
-        substitute('‘', '"'),
-        substitute('‚', '"'),
+        # substitute_regex(r'([a-z])‘([a-z])', r"\g<1>'\g<2>", ignore_case=True),
+        # substitute_regex(r'([a-z])’([a-z])', r"\g<1>'\g<2>", ignore_case=True),
+        substitute('‘', "'"),
+        substitute('‚', "'"),
         # TODO this can cause problems. (In some texts right single quotation marks are used as apostrophes)
         # use regex to look for matching opening quot?
-        substitute('’', '"'),
+        substitute('’', "'"),
         substitute("''", '"'),
         substitute("´´", '"'),
         substitute("…", "..."),
@@ -154,5 +154,3 @@ class MosesPunctNormalizer(MosesPunctuationNormalizer):
         if not norm_numbers:
             norm_number_rules = self.SUBSTITUTIONS_DE_ES_CZ_CS_FR + self.SUBSTITUTIONS_OTHER
             self.substitutions = [s for s in self.substitutions if s not in norm_number_rules]
-
-
